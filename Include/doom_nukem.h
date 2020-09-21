@@ -15,7 +15,7 @@
 # define DOOM_NUKEM_H
 # define WIN_TITLE "HAIL TO THE KING"
 # include <stdint.h>
-
+# include "../libft/libft.h"
 # include "../SDL/include/SDL.h"
 
 //// TODO разобраться со шрифтами в SDL
@@ -46,6 +46,7 @@ typedef struct		s_texture
 	int 			width;
 	int 			height;
 	uint32_t		*bit_map;
+	char			*text_name;
 }					t_texture;
 
 /*
@@ -132,8 +133,9 @@ struct			s_data
 
 void			init_data(t_data *data);
 void			init_sdl(t_data *data, char *name);
-t_texture		**init_textures(char **textures_data, int how_much, t_data *data);
-void			main_loop(t_data *data);
+t_texture		**init_textures(char *path, t_data *data);
+int				open_file(char *map_name, t_data *data);
+t_texture		*find_texture_by_name(char *name, t_data *data);
 
 /*
 **		clear (leaks management)
@@ -160,11 +162,24 @@ void			menu_key_event(SDL_Event *event, t_data *data);
 void			menu_mouse_event();
 
 /*
+**		main loop
+*/
+
+void			main_loop(t_data *data);
+
+/*
 **		етих функций пока нет
 */
 
 void			start_the_game(t_data *data);
 void			pause_game(t_data *data);
 void			map_editor(t_data *data);
+
+/*
+**		common draw functions
+*/
+struct			s_vec2;
+int				scale_image(t_texture *texture, t_data *data,
+							struct s_vec2 start, struct s_vec2 end);
 
 #endif

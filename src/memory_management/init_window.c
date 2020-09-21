@@ -1,5 +1,5 @@
-#include "../Include/doom_nukem.h"
-#include "../Include/map_struct.h"
+#include "../../Include/doom_nukem.h"
+#include "../../Include/map_struct.h"
 
 /*
 **		the whole file is just sdl-initialization, you can skip it,
@@ -53,6 +53,7 @@ void			init_sdl(t_data *data, char *name)
 			"SDL-renderer init failed.", data);
 	init_rect(data);
 	init_text(data);
+	SDL_UnlockTexture(data->sdl->tex);
 	return ;
 }
 
@@ -60,10 +61,15 @@ void			remove_sdl(t_sdl **remove)
 {
 	if (remove == NULL || *remove == NULL)
 		return ;
+	if ((*remove)->rend != NULL)
+		SDL_DestroyRenderer((*remove)->rend);
 	if ((*remove)->rect != NULL)
-		ft_memdel((void **)&(*remove)->rect);
+		ft_memdel((void **) &(*remove)->rect);
 	if ((*remove)->color_buffer != NULL)
-		ft_memdel((void **)&(*remove)->color_buffer);
+	{
+		SDL_DestroyTexture((*remove)->tex);
+		ft_memdel((void **) &(*remove)->color_buffer);
+	}
 	if ((*remove)->win != NULL)
 		SDL_DestroyWindow((*remove)->win);
 	SDL_Quit();

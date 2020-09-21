@@ -6,9 +6,6 @@
 
 void	start_the_game(t_data *data)
 {
-	t_main_actions	actions;
-
-	actions.mouse_event = &engine_mouse_event;
-	actions.key_event = &engine_key_event;
-	data->go_to = &actions;
+	data->go_to->mouse_event = &engine_mouse_event;
+	data->go_to->key_event = &engine_key_event;
 }

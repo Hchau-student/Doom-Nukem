@@ -29,6 +29,12 @@
 # define TANGENT_45		1.61977519054
 
 /*
+**		some defines for static amount
+*/
+
+# define MAX_WEAPONS	3
+
+/*
 **		DOOR - horizontal or what?
 **		WINDOW - Портал с 2 текстурами
 **		GLASSY - formally it should behave as a portal,
@@ -86,9 +92,15 @@ typedef enum			e_weapon_texture
 {
 	WEAPON_0_FRAME = 0,
 	WEAPON_1_FRAME = 1,
-//	WEAPON_SHOOT = 2,
 	WEAPON_FRAMES = 2
 }						t_weapon_texture;
+
+typedef enum			e_animate_shoot
+{
+	REMAINDER_SHOOT_ANIMATE = 2,
+	REMAINDER_SHOOT_0 = 0,
+	REMAINDER_SHOOT_1 = 1
+}						t_animate_shoot;
 
 /*
 **	it is from mandatory part: player should be able to swim or fly
@@ -104,13 +116,12 @@ typedef enum			e_weapon_texture
 
 typedef enum			e_health_texture
 {
-	HEALTH_MAX = 6,
-	HEALTH_100 = 5,
-	HEALTH_80 = 4,
-	HEALTH_60 = 3,
-	HEALTH_40 = 2,
-	HEALTH_20 = 1,
-	HEALTH_0 = 0
+	HEALTH_MAX = 5,
+	HEALTH_100 = 4,
+	HEALTH_80 = 3,
+	HEALTH_60 = 2,
+	HEALTH_40 = 1,
+	HEALTH_20 = 0,
 }						t_health_texture;
 
 typedef enum			e_player_state
@@ -118,7 +129,7 @@ typedef enum			e_player_state
 	MAX_STATE = 5,
 	PLAYER_LEFT = 0,
 	PLAYER_RIGHT = 1,
-	PLAYER_SMILE = 2,
+	PLAYER_NORMAL = 2,
 	PLAYER_HURT = 3,
 	PLAYER_KILL = 4,
 }						t_player_state;
@@ -157,15 +168,16 @@ typedef struct			s_shoot
 	t_vec3		position;
 	t_vec3		direction;
 	t_texture	*texture;
-//	t_texture	*remainder;
+	t_texture	*remainder[REMAINDER_SHOOT_ANIMATE];
 	void		(*hit)(struct s_shoot *shoot, void *obj);
 	int32_t		current_sector;
 }						t_shoot;
 
 typedef struct			s_weapon
 {
+	char				*name;
 	t_texture			*texture[WEAPON_FRAMES];//do we want to animate this?
-	t_weapon_texture	frame;
+	int64_t				frame;
 	int64_t				bullets;
 	int64_t				bullets_max;
 	char				i_have_it;
@@ -238,6 +250,7 @@ typedef struct			s_display_hud
 	t_texture			*player_texture[HEALTH_MAX][MAX_STATE];
 	int8_t				health;
 	int8_t				armor;
+	int8_t				state;
 }						t_display_hud;
 
 /*
@@ -278,14 +291,11 @@ typedef struct			s_sector_render
 **	int32_t			walls_count;
 **	t_texture		*textures[2];
 **	neighbors are for searching current sector for the player; won't be sorted
-**
 */
 
 struct					s_sector
 {
 	int				id;
-	t_twlist		*walls;
-	int32_t			walls_count;
 	t_texture		*textures[2];
 	t_list			*neighbors;
 	float			floor_height;
@@ -313,10 +323,19 @@ typedef struct			s_engine
 **		initialization
 */
 
-void	start_the_game(t_data *data);
-void	init_engine(t_data *data, t_engine *engine);
-void	engine_key_event(SDL_Event *event, t_data *data);
-void	engine_mouse_event();
+void			start_the_game(t_data *data);
+void			init_engine(t_data *data);
+t_weapon		*init_weapon(t_data *data);
+t_player		*init_player(t_data *data);
+t_display_hud	*init_hud(t_data *data);
+
+/*
+**		leaks management
+*/
+
+void			remove_hud(t_display_hud **hud);
+void			remove_player(t_player **player);
+void			remove_engine(t_data *data);
 
 /*
 **		main loop,
@@ -324,12 +343,22 @@ void	engine_mouse_event();
 **		3d walls
 */
 
+void			engine_key_event(SDL_Event *event, t_data *data);
+void			engine_mouse_event();
+
 /*
 **		parse
 */
 
-void		parse(char *str, t_data *data);
-void		parse_wall();
-void		parse_sector();
+void			parse(char *str, t_data *data);
+void			parse_wall();
+void			parse_sector();
+int				check_line(char *should_be, char *check);
+
+/*
+**		simple drawings
+*/
+
+void			draw_hud(t_display_hud *hud, t_data *data);
 
 #endif

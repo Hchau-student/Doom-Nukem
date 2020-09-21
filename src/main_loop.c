@@ -9,10 +9,10 @@ void	main_loop(t_data *data)
 {
 	int quit = 0;
 	SDL_Event event;
-//	int is_pressed = FALSE;
 
 //    int KEYS[322]; если нужно запомнить клаву, крутой пример
 	while(!quit) {
+		data->go_to->condition(data);
 		while (SDL_PollEvent(&event)) {
 			//выведение битмапы
 //			win->update_texture(win, draw);

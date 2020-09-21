@@ -3,7 +3,7 @@
 
 void	load_game(t_data *data)
 {
-	init_engine(data, data->engine);
-	parse("./maps/3", data);
-//	start_the_game(data);
+	init_engine(data);
+	parse("/Users/hchau/Downloads/Doom-Nukem-structure/maps/3", data);
+	start_the_game(data);
 }

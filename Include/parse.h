@@ -8,11 +8,16 @@
 
 #include "doom_nukem.h"
 #include "map_struct.h"
-//
-//typedef struct		s_parse
-//{
-//
-//}					t_parse;
+
+/*
+**		we don't actually know, how much of everything do we have
+**		while we parse, so lists indeed!
+*/
+
+typedef struct		s_parse
+{
+
+}					t_parse;
 
 //void		parse_wall();
 //void		parse_sector();

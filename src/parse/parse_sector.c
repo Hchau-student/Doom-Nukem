@@ -1,7 +1,7 @@
 //
 // Created by Hugor Chau on 9/16/20.
 //
-#include "../../Include/parse.h"
+#include "../../Include/map_struct.h"
 
 void		parse_sector()
 {
