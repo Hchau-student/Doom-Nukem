@@ -40,7 +40,8 @@ C_FILES = main.c \
 ENGINE_FILES = start_the_game.c \
                key_event.c \
                mouse_event.c \
-               draw_hud.c
+               draw_hud.c \
+               tools_weapon.c
 
 MENU_FILES = menu.c \
              load_game.c \
@@ -49,7 +50,15 @@ MENU_FILES = menu.c \
 
 PARSE_FILES = parse.c \
               parse_wall.c \
-              parse_sector.c
+              parse_sector_2.c \
+              parse_sector_line_2.c \
+              tools.c \
+              parse_obj.c \
+              parse_single_object.c \
+              parse_single_wall.c \
+              parse_player.c \
+              parse_player_line.c \
+              parse_hud.c
 
 MEMORY_FILES = init_player.c \
               init_weapon.c \

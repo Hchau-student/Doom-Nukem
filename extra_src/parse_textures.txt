@@ -34,3 +34,6 @@
 ./extra_src/health/health_20_right.bmp
 ./extra_src/health/health_20_kill.bmp
 ./extra_src/health/health_20_hurt.bmp
+./extra_src/objects/medicine.bmp
+./extra_src/objects/armor.bmp
+./extra_src/objects/poison.bmp

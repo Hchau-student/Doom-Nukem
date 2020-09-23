@@ -14,12 +14,18 @@
 **		while we parse, so lists indeed!
 */
 
-typedef struct		s_parse
-{
-
-}					t_parse;
-
 //void		parse_wall();
 //void		parse_sector();
+
+/*
+**		это для утечек
+*/
+
+typedef struct		s_parse
+{
+	t_list			*gnl_str;
+	flag			gnl_read_flag;
+	char			brackets;
+}					t_parse;
 
 #endif //DOOM_NUKEM_STRUCTURE_PARSE_H

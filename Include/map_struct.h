@@ -20,7 +20,7 @@
 # include "../SDL/include/SDL.h"
 # define SCREEN_WIDTH	600
 # define SCREEN_HEIGHT	500
-
+# define CENTRE_W		SCREEN_WIDTH / 2
 /*
 **		sorry not sorry; need this for my calculations
 */
@@ -124,6 +124,22 @@ typedef enum			e_health_texture
 	HEALTH_20 = 0,
 }						t_health_texture;
 
+typedef enum			e_health_obj_type
+{
+	MEDICINE,
+	ARMOR,
+	POISON
+}						t_health_obj_type;
+
+typedef enum			e_obj_type
+{
+	HEALTH_OBJ,
+	POSTER_OBJ,
+	WEAPON_OBJ,
+	BULLETS_OBJ,
+	MAX_OBJ
+}						t_obj_type;
+
 typedef enum			e_player_state
 {
 	MAX_STATE = 5,
@@ -175,6 +191,7 @@ typedef struct			s_shoot
 
 typedef struct			s_weapon
 {
+	int8_t				common_type;
 	char				*name;
 	t_texture			*texture[WEAPON_FRAMES];//do we want to animate this?
 	int64_t				frame;
@@ -198,27 +215,36 @@ typedef struct s_sector	t_sector;
 typedef struct s_portal	t_portal;
 typedef struct s_wall	t_wall;
 
-/*
-**		to make whole this thing invisible - just ask wall to return
-**		portal->to(portal) and see, what it does :)
-*/
-
-struct					s_portal
+struct					s_wall
 {
-	t_wall			*wall;
-	t_wall			(*to)(t_portal *portal);
-	t_wall_type		type;
-};
-
-struct					s_wall//wall->portal.to(wall->portal)
-{
+	int8_t		type;
 	t_vec3		left;
 	t_vec3		right;
 	float		length;
-	t_portal	*portal;//wall type is in here!
+	t_wall		*portal_to;
 	t_sector	*sector;
 	t_texture	*textures[3];
 };
+
+typedef struct			s_health_obj
+{
+	int8_t				common_type;
+	int8_t				type;
+	int32_t				plus;
+	t_vec2				*place;
+	t_texture			*texture;
+}						t_health_obj;
+
+/*
+**		тупо для каста; все структуры obj ДОЛЖНЫ
+**		начинаться с int8_t type для определения типа
+**		и корректного каста
+*/
+
+typedef struct			s_obj
+{
+	int8_t				type;
+}						t_obj;
 
 /*
 **		what if we could limit enemy's location
@@ -248,6 +274,7 @@ typedef struct			s_display_hud
 	t_texture			*display;//main texture
 	t_weapon			*weapon;
 	t_texture			*player_texture[HEALTH_MAX][MAX_STATE];
+	t_texture			*armor_texture;
 	int8_t				health;
 	int8_t				armor;
 	int8_t				state;
@@ -282,7 +309,7 @@ typedef struct			s_sector_render
 	float		floor_height;
 	float		ceiling_height;
 	t_texture	*textures[2];
-	int32_t		light;//light color???
+	uint32_t		light;//light color???
 }						t_sector_render;
 
 /*
@@ -298,10 +325,11 @@ struct					s_sector
 	int				id;
 	t_texture		*textures[2];
 	t_list			*neighbors;
+	t_sector_render	*render;
 	float			floor_height;
 	float			ceiling_height;
-	t_objects		*objects;
-	t_sector_type	type;//??? Do we need this?
+	t_list			*objects;
+	t_sector_type	type;
 	//don't you wanna add gravity in here?
 };
 
@@ -314,10 +342,29 @@ typedef struct			s_engine
 	t_sdl			*sdl;
 	t_texture		**textures;
 	t_sector		*sectors;
+	uint32_t		sectors_count;
 	t_player		*player;
 	t_list			*enemies;
 	t_list			*shoots;
 }						t_engine;
+
+/*
+**		Да, это костыль. Мне нужно распарсить
+**		сектора, которые стоит поместить в массив,
+**		но количество секторов заранее неизвестно.
+**		Есть вариант сразу инициализировать огромный массив
+**		секторов или положить всё в листы, а потом переложить
+**		в массив. Либо в огромный массив, а потом его
+**		урезать. Мне больше нравится варик с листами, но
+**		их придётся чистить, а это проблема - ссылки на листы
+**		не могут лежать внутри основной структуры, это будет
+**		уродством.
+*/
+//
+//typedef struct		s_parse
+//{
+//	t_list			*sectors;
+//}					t_parse;
 
 /*
 **		initialization
@@ -351,8 +398,23 @@ void			engine_mouse_event();
 */
 
 void			parse(char *str, t_data *data);
-void			parse_wall();
-void			parse_sector();
+void			parse_wall(char *str, int fd, t_sector *sector, t_data *data);
+void			parse_sector(char *str, int fd, t_data *data);
+void			parse_line(char *str, int fd, t_sector *sector, t_data *data);
+void			parse_objects(char *str, int fd, t_sector *sector, t_data *data);
+void			*parse_object(char *str, int fd, t_sector *sector, t_data *data);
+t_twlist		*parse_single_wall(char *str, int fd, t_sector *sector, t_data *data);
+void			parse_player(char *str, int fd, t_data *data);
+void			parse_hud(char *str, int fd, t_data *data);
+void			parse_player_line(char *str, int fd, t_data *data);
+
+/*
+**		parse tools
+*/
+
+char			*skip_to(char *check, char *original);
+int				parse_num(char *str, uint32_t *box);
+char			*parse_float(char *str, float *box);
 int				check_line(char *should_be, char *check);
 
 /*
@@ -360,5 +422,11 @@ int				check_line(char *should_be, char *check);
 */
 
 void			draw_hud(t_display_hud *hud, t_data *data);
+
+/*
+**		tools for objects
+*/
+
+t_weapon		*find_weapon_by_name(char *name, t_data *data);
 
 #endif

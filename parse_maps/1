@@ -1,0 +1,80 @@
+sector
+{
+    type                water
+    light               0xAAAAAAAA
+    floor 10.0          Eda
+    ceiling 40.0        Dicksy
+    walls
+    {
+        wall_0  x1 290.0    y1 190.0    x2 500.0    y2 300.0    type    normal
+        textures bedy_c_mamami
+        wall_1  x1 400.0    y1 300.0    x2 500.0    y2 300.0    type    normal
+        textures bedy_c_mamami
+        wall_2  x1 400.0    y1 300.0    x2 500.0    y2 350.0    type    normal
+        textures bedy_c_mamami
+        wall_3  x1 400.0    y1 350      x2 500.0    y2 350.0    type    normal
+        textures bedy_c_mamami
+        wall_4  x1 400.0    y1 350      x2 500.0    y2 400.0    type    normal
+        textures bedy_c_mamami
+        wall_5  x1 380.0    y1 400      x2 500.0    y2 400.0    type    normal
+        textures bedy_c_mamami
+        wall_6  x1 380.0    y1 400      x2 350.0    y2 350.0    type    normal
+        textures bedy_c_mamami
+        wall_7  x1 350.0    y1 400      x2 350.0    y2 350.0    type    normal
+        textures bedy_c_mamami
+        wall_8  x1 350.0    y1 400      x2 320.0    y2 320.0    type    normal
+        textures bedy_c_mamami
+        wall_9  x1 320.0    y1 380      x2 320.0    y2 320.0    type    normal
+        textures bedy_c_mamami
+        wall_10 x1 320.0    y1 380      x2 300.0    y2 350.0    type    normal
+        textures bedy_c_mamami
+        wall_11 x1 280.0    y1 380      x2 300.0    y2 350.0    type    normal
+        textures bedy_c_mamami
+        wall_12 x1 280.0    y1 380      x2 290.0    y2 320.0    type    door
+        textures    bedy_c_mamami       selderey                bedy_c_mamami
+        wall_13 x1 270.0    y1 350      x2 290.0    y2 320.0    type    normal
+        textures bedy_c_mamami
+        wall_14 x1 270.0    y1 350      x2 270.0    y2 300.0    type    normal
+        textures bedy_c_mamami
+        wall_15 x1 250.0    y1 300      x2 270.0    y2 300.0    type    normal
+        textures bedy_c_mamami
+        wall_16 x1 250.0    y1 300      x2 220.0    y2 290.0    type    normal
+        textures bedy_c_mamami
+        wall_17 x1 220.0    y1 250      x2 220.0    y2 290.0    type    glassy
+        textures bedy_c_mamami
+        wall_18 x1 220.0    y1 250      x2 190.0    y2 260.0    type    normal
+        textures bedy_c_mamami
+        wall_19 x1 220.0    y1 200      x2 190.0    y2 260.0    type    normal
+        textures bedy_c_mamami
+        wall_20 x1 220.0    y1 200      x2 260.0    y2 190.0    type    normal
+        textures bedy_c_mamami
+        wall_21 x1 290.0    y1 190      x2 260.0    y2 190.0    type    portal
+        textures bedy_c_mamami          bedy_c_mamami
+    }
+    t_walls
+    objects
+    {
+        poison      x270.0 y345.0   hp  -50
+        medicine    x240.0 y300.0   hp  50
+        medicine    x395.0 y350.0   hp  50
+        armor       x270.0 y345.0   hp  50
+    }
+    t_objects
+}
+t_sector
+
+player
+{
+    hud
+    {
+        weapon  carabine     bullets 1
+        health  100
+        armor   0
+    }
+    t_hud
+    position        x 38.0  y 38.0
+    direction       x 0.0   z 0.5
+    move            knees 0.3   ducking 0.4     eyes 1.0
+    fov             90
+}
+t_player

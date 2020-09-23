@@ -7,20 +7,6 @@
 **		works with *.txt for now
 */
 
-/*
-**		this function checks if word or line were correct
-*/
-
-int				check_line(char *should_be, char *check)
-{
-	int		i;
-
-	i = 0;
-	while (should_be[i] == check[i])
-		i++;
-	return (should_be[i] == '\0' ? 0 : 1);
-}
-
 void			parse_vertex(char *str, t_data *data)
 {
 	static char		check[7] = "vertex\0";
@@ -36,7 +22,7 @@ int				open_file(char *map_name, t_data *data)
 	return (fd);
 }
 
-static void		parse_file(int fd, t_data *data)
+static void		parse_file_2(int fd, t_data *data)
 {
 	char	*line;
 	char	flag;
@@ -44,8 +30,9 @@ static void		parse_file(int fd, t_data *data)
 	while ((flag = get_next_line(fd, &line)) == 1)
 	{
 		line[0] == 'v' ? parse_vertex(line, data) : 0;
-		line[0] == 'w' ? parse_wall() : 0;
-		line[0] == 's' ? parse_sector() : 0;
+//		line[0] == 'w' ? parse_wall() : 0;
+		line[0] == 's' ? parse_sector(line, fd, data) : 0;
+		line[0] == 'p' ? parse_player(line, fd, data) : 0;
 		ft_strdel(&line);
 		//распихать все данные в *engine
 	}
@@ -55,7 +42,5 @@ static void		parse_file(int fd, t_data *data)
 
 void	parse(char *str, t_data *data)
 {
-	parse_file(open_file(str, data), data);
-//	safe_call_int(close(fd), "Can\'t close file."
-//					  "Function parse, module parse.", data);
+	parse_file_2(open_file(str, data), data);
 }

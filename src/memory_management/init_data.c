@@ -9,30 +9,24 @@
 #define ABSOLUTE_PATH_TEXTURES	"/Users/hchau/Downloads/" \
 		"Doom-Nukem-structure/extra_src/parse_textures.txt"
 
-void	put_bitmap(t_data *data) {
-	t_display_hud	*hud;
+//void	put_bitmap(t_data *data)
+//{
+//
+//}
 
-	hud = ((t_engine *)data->engine)->player->hud;
-	draw_hud(hud, data);
+void	update_texture(t_data *data)
+{//сделать методом?
+//	clear_bitmap(data);
 	safe_call_int(SDL_UpdateTexture(
 			data->sdl->tex,
 			data->sdl->rect,
 			data->sdl->color_buffer,
 			SCREEN_WIDTH * sizeof(uint32_t)
-			), "Texture update failed", data);
+	), "Texture update failed", data);
 	safe_call_int(SDL_SetRenderDrawColor( data->sdl->rend , 0, 0, 0, SDL_ALPHA_OPAQUE ), "Can't clear render.", data);
 	safe_call_int(SDL_RenderClear( data->sdl->rend  ), "Can't clear render.", data);
 	safe_call_int(SDL_RenderCopy( data->sdl->rend , data->sdl->tex, NULL, NULL ), "Can't clear render.", data);
 	SDL_RenderPresent( data->sdl->rend );
-	hud->state++;
-	if (hud->state > 4)
-		hud->state = 0;
-}
-
-void	update_texture(t_data *data)
-{//сделать методом?
-//	clear_bitmap(data);
-	put_bitmap(data);
 }
 
 void			menu_condition(t_data *data)

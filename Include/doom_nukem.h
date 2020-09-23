@@ -119,11 +119,13 @@ typedef struct		s_main_actions
 **		текстуры для движка хранятся в движке
 */
 
+struct		s_engine;
+
 struct			s_data
 {
 	t_sdl			*sdl;
 	t_texture		**textures;
-	void			*engine;
+	struct s_engine	*engine;
 	t_main_actions	*go_to;
 };
 
@@ -181,5 +183,6 @@ void			map_editor(t_data *data);
 struct			s_vec2;
 int				scale_image(t_texture *texture, t_data *data,
 							struct s_vec2 start, struct s_vec2 end);
+void			update_texture(t_data *data);
 
 #endif

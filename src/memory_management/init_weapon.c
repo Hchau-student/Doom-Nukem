@@ -38,6 +38,7 @@ static t_weapon		*init_one_weapon(t_data *data, char *weapon_name)
 	frame_1 = ft_strjoin(weapon_name, "_frame_1");
 	shoot_name = ft_strjoin(weapon_name, "_shoot");
 	weapon = (t_weapon *)safe_call_ptr(malloc(sizeof(t_weapon)), "Crashed malloc: weapon", data);
+	weapon->name = ft_strdup(weapon_name);
 	weapon->bullets = 0;
 	weapon->bullets_max = 200;
 	weapon->i_have_it = FALSE;
