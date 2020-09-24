@@ -14,31 +14,36 @@ static void		check_error(char *line, char flag, char brackets, t_data *data)
 							"check for brackets.", data);
 }
 
-void			parse_wall(char *str, int fd, t_sector *sector, t_data *data)
+void			parse_wall(t_parse **parse, t_data *data)
 {
-	char				*line;
 	char				count_brackets;
 	char				flag;
 	t_twlist			*tmp;
 
 	count_brackets = 0;
 	tmp = ft_twlstnew(NULL, 0);
-	safe_call_int(check_line("walls", str),
+	safe_call_int(check_line("walls", (*parse)->cur_str),
 		"Walls not walls: check \"./src/parse/parse_wall.c\".", data);
-	while (((flag = get_next_line(fd, &line)) == 1)
-		   && (check_line("t_walls", line)))
+	ft_strdel(&(*parse)->cur_str);
+	(*parse)->cur_sector->render->walls = tmp;
+	while (((flag = get_next_line((*parse)->fd, &(*parse)->cur_str)) == 1)
+		   && (check_line("t_walls", (*parse)->cur_str)))
 	{
-		ft_putendl(line);
-		if (!check_line("{", line))
+		if (!check_line("{", (*parse)->cur_str))
 			count_brackets++;
-		else if (!check_line("}", line))
+		else if (!check_line("}", (*parse)->cur_str))
 			count_brackets--;
 		else
 		{
-			tmp->next = parse_single_wall(line, fd, sector, data);
+			tmp->next = parse_single_wall(parse, data);
+			tmp->next->prev = tmp;
 			tmp = tmp->next;
+			(*parse)->cur_sector->render->walls_count++;
 		}
-		ft_strdel(&line);
+		ft_strdel(&(*parse)->cur_str);
 	}
-	check_error(line, flag, count_brackets, data);
+	tmp->next = (*parse)->cur_sector->render->walls->next;
+	(*parse)->cur_sector->render->walls = tmp;
+	check_walls_data((*parse)->cur_sector, data);
+	check_error((*parse)->cur_str, flag, count_brackets, data);
 }

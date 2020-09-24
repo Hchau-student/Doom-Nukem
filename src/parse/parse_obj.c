@@ -1,25 +1,25 @@
 #include "../../Include/map_struct.h"
+#include "../../Include/objects.h"
 
-static void		check_error(char *line, char flag, char brackets, t_data *data)
+static void		check_error(t_parse **parse, char brackets, t_data *data, char *end_line)
 {
-	if (flag == -1)
-		safe_call_int(-1, "Read error: gnl returned -1.", data);
-	safe_call_int(check_line("t_objects", line),
-		"Check for error in \'objects\' data. There should "
-		"be closing flag \'t_objects\'.", data);
-	safe_call_int(brackets, "Sector parse error: "
-						"check for brackets.", data);
+	if ((*parse)->gnl_read_flag == -1)
+		safe_call_parse_int(-1, "Read error: gnl returned -1.", data, parse);
+	safe_call_parse_int(check_line(end_line, (*parse)->cur_str),
+						(*parse)->error_message, data, parse);
+	safe_call_parse_int(brackets, "Sector parse error: "
+						"check for brackets.", data, parse);
 }
 
-static void		get_cur_list(t_list **cur, t_list **all, t_data *data)
+static void		get_cur_list(t_list **cur, t_list **all, t_parse **parse, t_data *data)
 {
 	t_list		*tmp;
 
 	if (*all == NULL)
 	{
-		*all = (t_list *)safe_call_ptr(ft_lstnew(NULL, sizeof(void *)),
+		*all = (t_list *)safe_call_parse_ptr(ft_lstnew(NULL, sizeof(void *)),
 				"Malloc crashed in \"./src/parse/parse_obj.c\", "
-				"\"new_object\".", data);
+				"\"new_object\".", data, parse);
 		*cur = *all;
 		return ;
 	}
@@ -29,25 +29,25 @@ static void		get_cur_list(t_list **cur, t_list **all, t_data *data)
 	*cur = tmp;
 }
 
-static t_list	*new_object(char *str, int fd, t_sector *sector, t_data *data)
+static t_list	*new_object(t_parse **parse, t_data *data)
 {
 	t_list		*res;
 	void		*obj;
 	size_t		obj_size;
 
 	obj_size = MAX_OBJ;
-	obj = parse_object(str, fd, sector, data);
+	obj = parse_object(parse, data);
 	obj_size = ((t_obj *)obj)->type == HEALTH_OBJ ?
 			sizeof(t_health_obj) : obj_size;
-//	obj_size = ((t_obj *)obj)->type == POSTER ? sizeof(t_poster_obj) : obj_size;
+//	obj_size = ((t_obj *)obj)->type == POSTER_OBJ ? sizeof(t_poster_obj) : obj_size;
 	obj_size = ((t_obj *)obj)->type == WEAPON_OBJ ? sizeof(t_weapon) : obj_size;
-//	obj_size = ((t_obj *)obj)->type == BULLETS ? sizeof(t_bullets) : obj_size;
+	obj_size = ((t_obj *)obj)->type == BULLETS_OBJ ? sizeof(t_bullets_obj) : obj_size;
 	if (obj_size == MAX_OBJ)
 		safe_call_int(-1, "Wrong obj type."
 		"Error in \"./src/parse/parse_obj.c\", \"new_object\".", data);
-	res = (t_list *)safe_call_ptr(ft_lstnew(obj, obj_size),
+	res = (t_list *)safe_call_parse_ptr(ft_lstnew(obj, obj_size),
 		"Malloc crashed in \"./src/parse/parse_obj.c\","
-				" \"new_object\".", data);
+				" \"new_object\".", data, parse);
 	ft_memdel((void **)&obj);
 	return (res);
 }
@@ -63,32 +63,34 @@ static void		remove_first_list(t_list **all)
 	*all = res;
 }
 
-void			parse_objects(char *str, int fd, t_sector *sector, t_data *data)
+void			parse_objects(t_parse **parse, t_data *data)
 {
-	char				*line;
 	char				count_brackets;
-	char				flag;
 	t_list				*tmp;
 
 	count_brackets = 0;
-	get_cur_list(&tmp, &sector->objects, data);
-	safe_call_int(check_line("objects", str),
-		"Objects not objects: check \"./src/parse/parse_obj\".", data);
-	while (((flag = get_next_line(fd, &line)) == 1)
-		 && (check_line("t_objects", line)))
+	get_cur_list(&tmp, &(*parse)->cur_sector->objects, parse, data);
+	safe_call_parse_int(check_line("objects", (*parse)->cur_str),
+		"Objects not objects: check \"./src/parse/parse_obj\".", data, parse);
+	ft_strdel(&(*parse)->cur_str);
+	while ((((*parse)->gnl_read_flag = get_next_line((*parse)->fd, &(*parse)->cur_str)) == 1)
+		 && (check_line("t_objects", (*parse)->cur_str)))
 	{
-		ft_putendl(line);
-		if (!check_line("{", line))
+		if (!check_line("{", (*parse)->cur_str))
 			count_brackets++;
-		else if (!check_line("}", line))
+		else if (!check_line("}", (*parse)->cur_str))
 			count_brackets--;
 		else
 		{
-			tmp->next = new_object(line, fd, sector, data);
+			tmp->next = new_object(parse, data);
 			tmp = tmp->next;
 		}
-		ft_strdel(&line);
+		ft_strdel(&(*parse)->cur_str);
 	}
-	remove_first_list(&sector->objects);
-	check_error(line, flag, count_brackets, data);
+	remove_first_list(&(*parse)->cur_sector->objects);
+	(*parse)->error_message = ft_strdup("Check for error in "
+		"\'objects\' data. There should "
+		"be closing flag \'t_objects\'.");
+	ft_strdel(&(*parse)->error_message);
+	check_error(parse, count_brackets, data, "t_objects");
 }

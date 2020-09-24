@@ -1,0 +1,102 @@
+sector
+{
+    type                normal
+    light               0x99999999
+    floor 10.0          Eda
+    ceiling 40.0        Dicksy
+    walls
+    {
+        wall_0  x1 290.0    y1 190.0    x2 500.0    y2 300.0    type    normal
+        textures bedy_c_mamami
+        wall_2  x1 290.0    y1 190.0    x2 290.0    y2 240.0    type    portal
+        textures bedy_c_mamami          bedy_c_mamami
+        wall_1  x1 290.0    y1 240.0    x2 500.0    y2 350.0    type    normal
+        textures bedy_c_mamami
+        wall_3  x1 500.0    y1 300.0    x2 500.0    y2 350.0    type    normal
+        textures bedy_c_mamami
+    }
+    t_walls
+    objects
+    {
+        poison      x270.0 y345.0   hp  -50
+        medicine    x240.0 y300.0   hp  50
+        medicine    x395.0 y350.0   hp  50
+        armor       x270.0 y345.0   hp  50
+    }
+    t_objects
+}
+t_sector
+
+player
+{
+    hud
+    {
+        weapon  carabine     bullets 1
+        health  100
+        armor   0
+    }
+    t_hud
+    position        x 38.0  y 38.0
+    direction       x 0.0   z 0.5
+    move            knees 0.3   ducking 0.4     eyes 1.0
+    fov             90.0
+}
+t_player
+
+sector
+{
+    type                normal
+    light               0x99999999
+    floor 10.0          Eda
+    ceiling 40.0        Dicksy
+    walls
+    {
+        wall_0  x1 500.0    y1 350.0    x2 550.0    y2 420.0    type    normal
+        textures bedy_c_mamami
+        wall_2  x1 290.0    y1 240.0    x2 500.0    y2 350.0    type    portal
+        textures bedy_c_mamami          bedy_c_mamami
+        wall_1  x1 220.0    y1 300.0    x2 290.0    y2 240.0    type    normal
+        textures bedy_c_mamami
+        wall_3  x1 220.0    y1 300.0    x2 550.0    y2 420.0    type    portal
+        textures bedy_c_mamami          bedy_c_mamami
+    }
+    t_walls
+    objects
+    {
+        poison      x270.0 y345.0   hp  -50
+        medicine    x240.0 y300.0   hp  50
+        medicine    x395.0 y350.0   hp  50
+        armor       x270.0 y345.0   hp  50
+    }
+    t_objects
+}
+t_sector
+
+sector
+{
+    type                normal
+    light               0x99999999
+    floor 10.0          Eda
+    ceiling 40.0        Dicksy
+    walls
+    {
+        wall_0  x1 550.0    y1 450.0    x2 550.0    y2 420.0    type    normal
+        textures bedy_c_mamami
+        wall_3  x1 220.0    y1 300.0    x2 550.0    y2 420.0    type    portal
+        textures bedy_c_mamami          bedy_c_mamami
+        wall_1  x1 220.0    y1 350.0    x2 220.0    y2 300.0    type    normal
+        textures bedy_c_mamami
+        wall_2  x1 220.0    y1 350.0    x2 550.0    y2 450.0    type    normal
+        textures bedy_c_mamami
+    }
+    t_walls
+    objects
+    {
+        poison      x270.0 y345.0   hp  -50
+        medicine    x240.0 y300.0   hp  50
+        medicine    x395.0 y350.0   hp  50
+        armor       x270.0 y345.0   hp  50
+    }
+    t_objects
+}
+t_sector

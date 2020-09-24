@@ -42,16 +42,17 @@ static void			*parse_health_obj(char *str,
 	return (*object);
 }
 
-void				*parse_object(char *str,
-						int fd, t_sector *sector, t_data *data)
+void				*parse_object(t_parse **parse, t_data *data)
 {
 	void	*res;
+	char	*str;
 
+	str = (*parse)->cur_str;
 	res = NULL;
 	while (*str)
 	{
 		if (*str == 'm' || *str == 'a' || *str == 'p')
-			return (parse_health_obj(str, sector, data, &res));
+			return (parse_health_obj(str, (*parse)->cur_sector, data, &res));
 //		if (*str == 'p')
 //			return (parse_poster(str, sector, data));
 //		else if (*str == 's')

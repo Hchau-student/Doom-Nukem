@@ -11,6 +11,7 @@
 void	game_condition(t_data *data)
 {
 	draw_hud(((t_engine *)data->engine)->player->hud, data);
+	draw_minimap(data);
 	update_texture(data);
 }
 

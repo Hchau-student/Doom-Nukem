@@ -17,8 +17,13 @@
 # include <stdint.h>
 # include "../libft/libft.h"
 # include "../SDL/include/SDL.h"
+# include "parse.h"
 
-//// TODO разобраться со шрифтами в SDL
+
+struct			s_vec2;
+typedef struct	s_data	t_data;
+struct			s_engine;
+struct			s_wall;
 
 typedef enum		e_bool
 {
@@ -35,6 +40,8 @@ typedef enum	e_screen_status
 	PAUSE_MENU,
 	PREFERENCES
 }				t_screen_status;
+
+//// TODO разобраться со шрифтами в SDL
 
 typedef struct		s_fonts
 {
@@ -75,17 +82,6 @@ typedef struct		s_mouse
 	t_bool			is_pressed;
 }					t_mouse;
 
-///*
-//**		лень писать по-английски; если мы зашиваем определённый
-//**		неизменяемый пулл текстур, я думаю, будет удобно определить
-//**		пути текстур в одном текстовом файле, возможно, отдельном;
-//*/
-//
-//typedef struct		s_textures_data
-//{
-//
-//}					t_textures_data;
-
 typedef struct		s_sdl
 {
 	SDL_Window		*win;
@@ -106,8 +102,6 @@ typedef struct		s_sdl
 **	так мы сможем разделить и обособить блоки, не нагромождая кучу if/else
 */
 
-typedef struct s_data	t_data;
-
 typedef struct		s_main_actions
 {
 	void		(*condition)(struct s_data *draw);
@@ -118,8 +112,6 @@ typedef struct		s_main_actions
 /*
 **		текстуры для движка хранятся в движке
 */
-
-struct		s_engine;
 
 struct			s_data
 {
@@ -180,9 +172,11 @@ void			map_editor(t_data *data);
 /*
 **		common draw functions
 */
-struct			s_vec2;
+
 int				scale_image(t_texture *texture, t_data *data,
 							struct s_vec2 start, struct s_vec2 end);
 void			update_texture(t_data *data);
+void			draw_line(struct s_wall *w, uint32_t **pix_array, int color);
+void			draw_minimap(t_data *data);
 
 #endif

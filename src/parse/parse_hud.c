@@ -3,18 +3,18 @@
 //
 #include "../../Include/map_struct.h"
 
-static void		check_error(char *line, char flag, char brackets, t_data *data)
+static void		check_error(t_parse **parse, char brackets, t_data *data, char *end_line)
 {
-	if (flag == -1)
-		safe_call_int(-1, "Read error: gnl returned -1.", data);
-	safe_call_int(check_line("t_hud", line),
-				  "Check for error in \'t_walls\' data. There should "
-				  "be closing flag \'t_walls\'.", data);
-	safe_call_int(brackets, "Sector parse error: "
-							"check for brackets.", data);
+	if ((*parse)->gnl_read_flag == -1)
+		safe_call_parse_int(-1,
+			"Read error: gnl returned -1.", data, parse);
+	safe_call_parse_int(check_line(end_line, (*parse)->cur_str),
+						(*parse)->error_message, data, parse);
+	safe_call_parse_int(brackets, "Sector parse error: "
+							"check for brackets.", data, parse);
 }
 
-static void		parse_weapon_by_name(char *name, t_data *data)
+static void		parse_weapon_by_name(char *name, t_parse **parse, t_data *data)
 {
 	char		box;
 	int			i;
@@ -31,60 +31,66 @@ static void		parse_weapon_by_name(char *name, t_data *data)
 	while (name[i] && (name[i] != ' '
 		   && name[i] != '\t' && name[i] != '\r'))
 		i++;
-	safe_call_ptr(name = skip_to("bullets", name + i),
-			   "Bullets not bullets: weapon parse error.", data);
+	safe_call_parse_ptr(name = skip_to("bullets", name + i),
+			   "Bullets not bullets: weapon parse error.", data, parse);
 	weapon->bullets = ft_atoi(name);
 	weapon->i_have_it = TRUE;
 }
 
-static void	parse_hud_main(char *str, int fd, t_data *data)
+//TODO: check atoi!
+static void	parse_hud_main(t_parse **parse, t_data *data)
 {
+	char	*str;
+
+	str = (*parse)->cur_str;
 	str = skip_to("", str);
 	if (*str == 'w')
 	{
-		safe_call_ptr(str = skip_to("weapon", str),
-			"Weapon not weapon: check hud, please.", data);
-		parse_weapon_by_name(str, data);
+		safe_call_parse_ptr(str = skip_to("weapon", str),
+			"Weapon not weapon: check hud, please.", data, parse);
+		parse_weapon_by_name(str, parse, data);
 	}
 	else if (*str == 'h')
 	{
-		safe_call_ptr(str = skip_to("health", str),
-			"Health not health: check hud, please.", data);
+		safe_call_parse_ptr(str = skip_to("health", str),
+			"Health not health: check hud, please.", data, parse);
 		data->engine->player->hud->health = ft_atoi(str);
 	}
 	else if (*str == 'a')
 	{
-		safe_call_ptr(str = skip_to("armor", str),
-			"Armor not armor: check hud, please.", data);
+		safe_call_parse_ptr(str = skip_to("armor", str),
+			"Armor not armor: check hud, please.", data, parse);
 		data->engine->player->hud->armor = ft_atoi(str);
 	}
 	else
-		safe_call_int(-1, "Parsing hud error, "
-			"\"./src/parse/parse_hud.c\"", data);
+		safe_call_parse_int(-1, "Parsing hud error, "
+			"\"./src/parse/parse_hud.c\"", data, parse);
 }
 
-void		parse_hud(char *str, int fd, t_data *data)
+void		parse_hud(t_parse **parse, t_data *data)
 {
-	char				*line;
 	char				count_brackets;
-	char				flag;
 
 	count_brackets = 0;
-	safe_call_int(check_line("hud", str),
-				  "Hud not walls: check \"./src/parse/parse_hud.c\".", data);
-	while (((flag = get_next_line(fd, &line)) == 1)
-		   && (check_line("t_hud", line)))
+	safe_call_parse_int(check_line("hud", (*parse)->cur_str),
+				"Hud not walls: check \"./src/parse/parse_hud.c\".", data, parse);
+	ft_strdel(&(*parse)->cur_str);
+	while ((((*parse)->gnl_read_flag = get_next_line((*parse)->fd, &(*parse)->cur_str)) == 1)
+		   && (check_line("t_hud", (*parse)->cur_str)))
 	{
-		ft_putendl(line);
-		if (!check_line("{", line))
+		if (!check_line("{", (*parse)->cur_str))
 			count_brackets++;
-		else if (!check_line("}", line))
+		else if (!check_line("}", (*parse)->cur_str))
 			count_brackets--;
 		else
-		{
-			parse_hud_main(line, fd, data);
-		}
-		ft_strdel(&line);
+			parse_hud_main(parse, data);
+		ft_strdel(&(*parse)->cur_str);
 	}
-	check_error(line, flag, count_brackets, data);
+	(*parse)->error_message = ft_strdup("Check for error in "
+				"\'t_walls\' data. There should "
+				"be closing flag \'t_walls\'.");
+	check_error(parse, count_brackets, data, "t_hud");
+	ft_strdel(&(*parse)->cur_str);
+	ft_strdel(&(*parse)->error_message);
+	(*parse)->player_hud_parsed++;
 }

@@ -4,58 +4,45 @@
 
 #include "../../Include/map_struct.h"
 
-static void		check_error(char *line, char flag, char brackets, t_data *data)
+static void		check_error(t_parse **parse, char brackets, t_data *data)
 {
-	if (flag == -1)
+	if ((*parse)->gnl_read_flag == -1)
 	{
-		safe_call_int(-1, "Read error: gnl returned -1.", data);
+		safe_call_parse_int(-1, "Read error: gnl returned -1.", data, parse);
 	}
-	if (check_line("t_player", line))
+	if (check_line("t_player", (*parse)->cur_str))
 	{
-		safe_call_int(-1,
+		safe_call_parse_int(-1,
 					  "Check for error in \'player\' data. There should "
-					  "be closing flag \'t_player\'.", data);
+					  "be closing flag \'t_player\'.", data, parse);
 	}
 	if (brackets != 0)
 	{
-		safe_call_int(-1, "Player parse error: "
-						  "check for brackets.", data);
+		safe_call_parse_int(-1, "Player parse error: "
+						  "check for brackets.", data, parse);
 	}
 }
 
-//typedef struct			s_player
-//{
-//	t_vec2			position;
-//	t_vec2			direction_angle;
-//	t_move			*move;
-//	float			fov;
-//	t_display_hud	*hud;
-//	int32_t			current_sector;
-//	t_sector		*cur_sec;
-//}						t_player;
-
-void			parse_player(char *str, int fd, t_data *data)
+void			parse_player(t_parse **parse, t_data *data)
 {
-	static uint32_t		index = 0;
-	char				flag;
-	char				*line;
-	char				count_brackets;
+	char	brackets;
 
-	count_brackets = 0;
-	safe_call_int(check_line("player", str),
-				  "No matches: check for error in \'player\' data.", data);
-	while (((flag = get_next_line(fd, &line)) == 1)
-		   && (check_line("t_player", line)))
+	brackets = 0;
+	safe_call_parse_int(check_line("player", (*parse)->cur_str),
+				  "No matches: check for error in \'player\' data.", data, parse);
+	ft_strdel(&(*parse)->cur_str);
+	while ((((*parse)->gnl_read_flag = get_next_line((*parse)->fd, &(*parse)->cur_str)) == 1)
+		   && (check_line("t_player", (*parse)->cur_str)))
 	{
-		if (check_line("{", line) == 0)
-			count_brackets++;
-		else if (check_line("}", line) == 0)
-			count_brackets--;
+		if (check_line("{", (*parse)->cur_str) == 0)
+			brackets++;
+		else if (check_line("}", (*parse)->cur_str) == 0)
+			brackets--;
 		else
-			parse_player_line(line, fd, data);
-		ft_strdel(&line);
+			parse_player_line(parse, data);
+		ft_strdel(&(*parse)->cur_str);
 	}
-	check_error(line, flag, count_brackets, data);
-	ft_strdel(&line);
-	index++;
+	check_error(parse, brackets, data);
+	ft_strdel(&(*parse)->cur_str);
+	(*parse)->player_parsed++;
 }

@@ -7,7 +7,7 @@
 static void		remove_object(void *obj, size_t size)
 {
 	if (((t_obj *)obj)->type == HEALTH_OBJ)
-		ft_memdel(&((t_health_obj *)obj)->place);
+		ft_memdel((void **)&((t_health_obj *)obj)->place);
 }
 
 static void		remove_wall(void *wall, size_t size)

@@ -18,6 +18,7 @@
 # include "../libft/libft.h"
 # include <math.h>
 # include "../SDL/include/SDL.h"
+#include "objects.h"
 # define SCREEN_WIDTH	600
 # define SCREEN_HEIGHT	500
 # define CENTRE_W		SCREEN_WIDTH / 2
@@ -124,22 +125,6 @@ typedef enum			e_health_texture
 	HEALTH_20 = 0,
 }						t_health_texture;
 
-typedef enum			e_health_obj_type
-{
-	MEDICINE,
-	ARMOR,
-	POISON
-}						t_health_obj_type;
-
-typedef enum			e_obj_type
-{
-	HEALTH_OBJ,
-	POSTER_OBJ,
-	WEAPON_OBJ,
-	BULLETS_OBJ,
-	MAX_OBJ
-}						t_obj_type;
-
 typedef enum			e_player_state
 {
 	MAX_STATE = 5,
@@ -226,37 +211,6 @@ struct					s_wall
 	t_texture	*textures[3];
 };
 
-typedef struct			s_health_obj
-{
-	int8_t				common_type;
-	int8_t				type;
-	int32_t				plus;
-	t_vec2				*place;
-	t_texture			*texture;
-}						t_health_obj;
-
-/*
-**		тупо для каста; все структуры obj ДОЛЖНЫ
-**		начинаться с int8_t type для определения типа
-**		и корректного каста
-*/
-
-typedef struct			s_obj
-{
-	int8_t				type;
-}						t_obj;
-
-/*
-**		what if we could limit enemy's location
-**		to one sector? It would be easier
-*/
-
-typedef struct			s_objects
-{
-	t_list		*sprites;
-	t_list		*enemies;
-}						t_objects;
-
 typedef struct			s_move
 {
 	float		knees;
@@ -294,6 +248,7 @@ typedef struct			s_player
 	t_display_hud	*hud;
 	int32_t			current_sector;
 	t_sector		*cur_sec;
+	//velocity
 }						t_player;
 
 /*
@@ -392,30 +347,6 @@ void			remove_engine(t_data *data);
 
 void			engine_key_event(SDL_Event *event, t_data *data);
 void			engine_mouse_event();
-
-/*
-**		parse
-*/
-
-void			parse(char *str, t_data *data);
-void			parse_wall(char *str, int fd, t_sector *sector, t_data *data);
-void			parse_sector(char *str, int fd, t_data *data);
-void			parse_line(char *str, int fd, t_sector *sector, t_data *data);
-void			parse_objects(char *str, int fd, t_sector *sector, t_data *data);
-void			*parse_object(char *str, int fd, t_sector *sector, t_data *data);
-t_twlist		*parse_single_wall(char *str, int fd, t_sector *sector, t_data *data);
-void			parse_player(char *str, int fd, t_data *data);
-void			parse_hud(char *str, int fd, t_data *data);
-void			parse_player_line(char *str, int fd, t_data *data);
-
-/*
-**		parse tools
-*/
-
-char			*skip_to(char *check, char *original);
-int				parse_num(char *str, uint32_t *box);
-char			*parse_float(char *str, float *box);
-int				check_line(char *should_be, char *check);
 
 /*
 **		simple drawings

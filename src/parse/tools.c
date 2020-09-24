@@ -50,14 +50,24 @@ int			parse_num(char *str, uint32_t *box)
 
 char		*parse_float(char *str, float *box)
 {
-	while (*str && ((*str >= '0' && *str <= '9') || (*str == '.' || *str == ',')))
+	float	res;
+
+	res = 0;
+	while (*str && (*str == ' ' || *str == '\t' || *str == '\r'))
+		str++;
+	*box = ft_atoi(str);
+	while (*str && ((*str >= '0' && *str <= '9')))
+		str++;
+	if (*str != '.' && *str != ',')
+		return NULL;
+	str++;
+	while (res > 1)
+		res /= 10.0;
+	*box += res;
+	while (*str && ((*str >= '0' && *str <= '9')))
 		str++;
 	while (*str && (*str == ' ' || *str == '\t' || *str == '\r'))
 		str++;
-//	while (*str)
-//	{
-//
-//	}
 	return (str);
 }
 

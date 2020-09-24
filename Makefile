@@ -41,7 +41,9 @@ ENGINE_FILES = start_the_game.c \
                key_event.c \
                mouse_event.c \
                draw_hud.c \
-               tools_weapon.c
+               tools_weapon.c \
+               draw_minimap.c \
+               drawing_line.c
 
 MENU_FILES = menu.c \
              load_game.c \
@@ -58,7 +60,11 @@ PARSE_FILES = parse.c \
               parse_single_wall.c \
               parse_player.c \
               parse_player_line.c \
-              parse_hud.c
+              parse_hud.c \
+              check_parsed_walls.c \
+              check_parsed_objects.c \
+              check_parsed_sectors.c \
+              safe_call.c
 
 MEMORY_FILES = init_player.c \
               init_weapon.c \

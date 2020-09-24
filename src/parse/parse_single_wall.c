@@ -2,7 +2,7 @@
 // Created by Hugor Chau on 9/22/20.
 //
 #include "../../Include/map_struct.h"
-
+#include <stdio.h>
 static void		get_wall_type(char *str, t_wall *wall, t_data *data)
 {
 	wall->type = -1;
@@ -38,6 +38,7 @@ static void		get_wall_coordinates(char *str, t_wall *wall, t_data *data)
 		wall->left = wall->right;
 		wall->right = box;
 	}
+	printf("%f,%f - %f,%f\n", wall->left.x, wall->left.y, wall->right.x, wall->right.y);
 	wall->length = sqrt(pow(wall->left.x - wall->right.x, 2)
 						+ pow(wall->left.y - wall->right.y, 2));
 	get_wall_type(str, wall, data);
@@ -92,18 +93,20 @@ static void		get_wall_textures(char *str, t_wall *wall, t_data *data)
 					"for window and portal kinds of wall.", data);
 }
 
-t_twlist		*parse_single_wall(char *str, int fd, t_sector *sector, t_data *data)
+t_twlist		*parse_single_wall(t_parse **parse, t_data *data)
 {
 	t_twlist	*res;
 	t_wall		*wall;
 	char		*line;
+	char		*str;
 
+	str = (*parse)->cur_str;
 	wall = safe_call_ptr(ft_memalloc(sizeof(t_wall)),
-						 "Malloc crashed in \"./src/parse/parse_wall.c\"", data);
-	wall->sector = sector;
+						"Malloc crashed in \"./src/parse/parse_wall.c\"", data);
+	wall->sector = (*parse)->cur_sector;
 	safe_call_ptr(str = skip_to("wall_", str), "Check your walls.", data);
 	get_wall_coordinates(str, wall, data);
-	if ((get_next_line(fd, &line)) != 1)
+	if ((get_next_line((*parse)->fd, &line)) != 1)
 		safe_call_int(-1, "Map error: no texture for a wall.", data);
 	get_wall_textures(line, wall, data);
 	res = safe_call_ptr(ft_twlstnew(wall, sizeof(t_wall)),
