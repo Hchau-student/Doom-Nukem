@@ -14,10 +14,12 @@ static void		parse_position(t_parse **parse, t_data *data)
 	position = data->engine->player->position;
 	safe_call_parse_ptr(str = skip_to("x", str),
 			"Player\'s position is not correct.", data, parse);
-	str = parse_float(str, &position.x);
+	safe_call_parse_ptr(str = parse_float(str, &position.x),
+			"Player\'s position is not correct.", data, parse);
 	safe_call_parse_ptr(str = skip_to("y", str),
 			"Player\'s position is not correct.", data, parse);
-	str = parse_float(str, &position.y);
+	safe_call_parse_ptr(str = parse_float(str, &position.y),
+			"Player\'s position is not correct.", data, parse);
 	if (*str)
 		safe_call_parse_int(-1,
 				"Extra characters: player\'s position.", data, parse);
@@ -34,13 +36,15 @@ static void		parse_direction(t_parse **parse, t_data *data)
 	direction = data->engine->player->position;
 	safe_call_parse_ptr(str = skip_to("x", str),
 				  "Player\'s direction is not correct.", data, parse);
-	str = parse_float(str, &direction.x);
+	safe_call_parse_ptr(str = parse_float(str, &direction.x),
+				"Parse float error. Player\'s direction", data, parse);
 	safe_call_parse_ptr(str = skip_to("z", str),
 				  "Player\'s direction is not correct.", data, parse);
-	str = parse_float(str, &direction.y);
+	safe_call_parse_ptr(str = parse_float(str, &direction.y),
+						"Parse float error. Player\'s direction", data, parse);
 	if (*str)
 		safe_call_parse_int(-1,
-				"Extra characters: player\'s position.", data, parse);
+				"Extra characters: player\'s direction.", data, parse);
 }
 
 static void		parse_move_floats(t_parse **parse, t_move *move, t_data *data)
@@ -49,26 +53,33 @@ static void		parse_move_floats(t_parse **parse, t_move *move, t_data *data)
 	static t_vec3		flags = {-1.0, -1.0, -1.0};
 	char				*str;
 
-	str = skip_to("move", (*parse)->cur_str);
+	safe_call_parse_ptr(str = skip_to("move", (*parse)->cur_str),
+		"player\'s move parsing error.", data, parse);
 	i = 0;
 	while (i < 3 && *str)
 	{
 		if (*str == 'k')
 		{
-			str = skip_to("knees", str);
-			str = parse_float(str, &move->knees);
+			safe_call_parse_ptr(str = skip_to("knees", str),
+				"Player\'s move parsing error.", data, parse);
+			safe_call_parse_ptr(str = parse_float(str, &move->knees),
+				"Float parse error, player\'s move.", data, parse);
 			flags.x = 1;
 		}
 		else if (*str == 'd')
 		{
-			str = skip_to("ducking", str);
-			str = parse_float(str, &move->ducking);
+			safe_call_parse_ptr(str = skip_to("ducking", str),
+				"player\'s move parsing error.", data, parse);
+			safe_call_parse_ptr(str = parse_float(str, &move->ducking),
+				"Float parse error, player\'s move.", data, parse);
 			flags.y = 1;
 		}
 		else if (*str == 'e')
 		{
-			str = skip_to("eyes", str);
-			str = parse_float(str, &move->eyes);
+			safe_call_parse_ptr(str = skip_to("eyes", str),
+				"player\'s move parsing error.", data, parse);
+			safe_call_parse_ptr(str = parse_float(str, &move->eyes),
+				"Float parse error, player\'s move.", data, parse);
 			flags.z = 1;
 		}
 		i++;
@@ -80,14 +91,11 @@ static void		parse_move_floats(t_parse **parse, t_move *move, t_data *data)
 
 static void		parse_move(t_parse **parse, t_data *data)
 {
-	t_move		*move;
-
 	if (data->engine->player->move == NULL)
 		data->engine->player->move =
-		safe_call_parse_ptr(ft_memalloc(sizeof(t_move)),
+		(t_move *)safe_call_parse_ptr(ft_memalloc(sizeof(t_move)),
 		"Malloc crashed in \"./src/parse/parse_player_line.c\"", data, parse);
-	move = data->engine->player->move;
-	parse_move_floats(parse, move, data);
+	parse_move_floats(parse, data->engine->player->move, data);
 }
 
 static void		parse_fov(t_parse **parse, t_data *data)
@@ -96,7 +104,8 @@ static void		parse_fov(t_parse **parse, t_data *data)
 
 	safe_call_parse_ptr(str = skip_to("fov", (*parse)->cur_str), "Fov not fov: "
 				"./src/parse/parse_player_line.c.", data, parse);
-	parse_float(str, &data->engine->player->fov);
+	safe_call_parse_ptr(parse_float(str, &data->engine->player->fov), "Float parsing error. Player FOV.",
+					data, parse);
 }
 
 void			parse_player_line(t_parse **parse, t_data *data)

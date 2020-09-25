@@ -18,6 +18,6 @@ void		remove_player(t_player **player)
 	if (!*player)
 		return;
 	remove_hud(&(*player)->hud);
-	ft_memdel((void **)(*player)->move);
+	ft_memdel((void **)&(*player)->move);
 	ft_memdel((void **)(player));
 }

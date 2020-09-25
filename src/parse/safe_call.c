@@ -24,7 +24,6 @@ void		remove_parse(t_parse **parse)
 		ft_memdel((void **)&lst);
 		lst = tmp;
 	}
-	ft_strdel(&(*parse)->error_message);
 	ft_memdel((void **)parse);
 }
 

@@ -3,6 +3,7 @@
 //
 #include "../../Include/map_struct.h"
 #include <stdio.h>
+
 static void		get_wall_type(char *str, t_wall *wall, t_data *data)
 {
 	wall->type = -1;
@@ -25,13 +26,13 @@ static void		get_wall_coordinates(char *str, t_wall *wall, t_data *data)
 	while (*str && (*str == ' ' || (*str >= '0' && *str <= '9')))
 		str++;
 	safe_call_ptr(str = skip_to("x1", str), error_message, data);
-	str = parse_float(str, &wall->left.x);
+	safe_call_ptr(str = parse_float(str, &wall->left.x), "parse float error", data);
 	safe_call_ptr(str = skip_to("y1", str), error_message, data);
-	str = parse_float(str, &wall->left.y);
+	safe_call_ptr(str = parse_float(str, &wall->left.y), "parse float error", data);
 	safe_call_ptr(str = skip_to("x2", str), error_message, data);
-	str = parse_float(str, &wall->right.x);
+	safe_call_ptr(str = parse_float(str, &wall->right.x),  "parse float error", data);
 	safe_call_ptr(str = skip_to("y2", str), error_message, data);
-	str = parse_float(str, &wall->right.y);
+	safe_call_ptr(str = parse_float(str, &wall->right.y), "parse float error", data);
 	if (wall->left.x > wall->right.x)
 	{
 		box = wall->left;
@@ -102,7 +103,7 @@ t_twlist		*parse_single_wall(t_parse **parse, t_data *data)
 
 	str = (*parse)->cur_str;
 	wall = safe_call_ptr(ft_memalloc(sizeof(t_wall)),
-						"Malloc crashed in \"./src/parse/parse_wall.c\"", data);
+						 "Malloc crashed in \"./src/parse/parse_wall.c\"", data);
 	wall->sector = (*parse)->cur_sector;
 	safe_call_ptr(str = skip_to("wall_", str), "Check your walls.", data);
 	get_wall_coordinates(str, wall, data);
@@ -111,5 +112,9 @@ t_twlist		*parse_single_wall(t_parse **parse, t_data *data)
 	get_wall_textures(line, wall, data);
 	res = safe_call_ptr(ft_twlstnew(wall, sizeof(t_wall)),
 						"Malloc crashed in \"./src/parse/parse_wall.c\"", data);
+	(*parse)->walls_tmp->next = res;
+	(*parse)->walls_tmp->next->prev = (*parse)->walls_tmp;
+	(*parse)->walls_tmp = (*parse)->walls_tmp->next;
+	(*parse)->cur_sector->render->walls_count++;
 	return (res);
 }

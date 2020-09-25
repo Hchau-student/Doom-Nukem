@@ -35,7 +35,10 @@ typedef struct		s_parse
 	struct s_sector	*cur_sector;
 	int64_t			fd;
 	int64_t			sector_index;
-	char			*error_message;
+//	char			*error_message;
+	t_list			*obj;
+	char			letter;
+	t_twlist		*walls_tmp;
 }					t_parse;
 
 /*
@@ -79,5 +82,10 @@ int		safe_call_parse_int(int res, char *message,
 void	*safe_call_parse_ptr(void *res, char *message,
 							struct s_data *data, t_parse **parse);
 void		remove_parse(t_parse **parse);
+void		check_error(t_parse **parse, char brackets,
+						struct s_data *data);
+void		parse_struct(t_parse **parse, struct s_data *data,
+				void (*parse_thing)(t_parse **, struct s_data *),
+				char *signal_word);
 
 #endif

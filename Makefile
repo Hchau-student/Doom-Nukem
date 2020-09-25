@@ -64,7 +64,8 @@ PARSE_FILES = parse.c \
               check_parsed_walls.c \
               check_parsed_objects.c \
               check_parsed_sectors.c \
-              safe_call.c
+              safe_call.c \
+              parse_struct.c
 
 MEMORY_FILES = init_player.c \
               init_weapon.c \
