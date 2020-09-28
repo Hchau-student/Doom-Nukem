@@ -51,7 +51,7 @@ void			parse_sector(t_parse **parse, struct s_data *data);
 void			parse_line_sector(t_parse **parse, struct s_data *data);
 void			parse_objects(t_parse **parse, struct s_data *data);
 void			*parse_object(t_parse **parse, struct s_data *data);
-t_twlist		*parse_single_wall(t_parse **parse, struct s_data *data);
+void			parse_single_wall(t_parse **parse, struct s_data *data);
 void			parse_player(t_parse **parse, struct s_data *data);
 void			parse_hud(t_parse **parse, struct s_data *data);
 void			parse_player_line(t_parse **parse, struct s_data *data);

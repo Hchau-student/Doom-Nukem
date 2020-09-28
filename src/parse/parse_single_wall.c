@@ -39,7 +39,6 @@ static void		get_wall_coordinates(char *str, t_wall *wall, t_data *data)
 		wall->left = wall->right;
 		wall->right = box;
 	}
-	printf("%f,%f - %f,%f\n", wall->left.x, wall->left.y, wall->right.x, wall->right.y);
 	wall->length = sqrt(pow(wall->left.x - wall->right.x, 2)
 						+ pow(wall->left.y - wall->right.y, 2));
 	get_wall_type(str, wall, data);
@@ -65,13 +64,13 @@ static char		*find_texture(char *str, t_wall *wall, int text_where, t_data *data
 	return (str);
 }
 
-static void		get_wall_textures(char *str, t_wall *wall, t_data *data)
+static void		get_wall_textures(char *str, t_wall *wall, t_data *data, t_parse **parse)
 {
 	int			i;
 
 	i = 0;
-	safe_call_ptr(str = skip_to("textures", str),
-				  "Check wall\'s texture.", data);
+	safe_call_parse_ptr(str = skip_to("textures", str),
+				  "Check wall\'s texture.", data, parse);
 	while (i < 3)
 	{
 		str = find_texture(str, wall, i, data);
@@ -80,41 +79,43 @@ static void		get_wall_textures(char *str, t_wall *wall, t_data *data)
 			break ;
 	}
 	if (*str)
-		safe_call_int(-1, "Should be max 3 "
-					"textures for a wall.", data);
+		safe_call_parse_int(-1, "Should be max 3 "
+					"textures for a wall.", data, parse);
 	if (i == 1 && wall->type != WALL && wall->type != GLASSY)
-		safe_call_int(-1, "Should be more than "
+		safe_call_parse_int(-1, "Should be more than "
 						  "1 texture for all kind of wall "
-						  "except of normal and glassy.", data);
+						  "except of normal and glassy.", data, parse);
 	if (i == 3 && (wall->type != DOOR))
-		safe_call_int(-1, "Should be "
-						  "3 textures for door type wall.", data);
+		safe_call_parse_int(-1, "Should be "
+						  "3 textures for door type wall.", data, parse);
 	if (i == 2 && (wall->type != WINDOW && wall->type != PORTAL))
-		safe_call_int(-1, "Should be 2 textures "
-					"for window and portal kinds of wall.", data);
+		safe_call_parse_int(-1, "Should be 2 textures "
+					"for window and portal kinds of wall.", data, parse);
 }
 
-t_twlist		*parse_single_wall(t_parse **parse, t_data *data)
+void			parse_single_wall(t_parse **parse, t_data *data)
 {
 	t_twlist	*res;
 	t_wall		*wall;
-	char		*line;
 	char		*str;
 
 	str = (*parse)->cur_str;
-	wall = safe_call_ptr(ft_memalloc(sizeof(t_wall)),
-						 "Malloc crashed in \"./src/parse/parse_wall.c\"", data);
+	wall = safe_call_parse_ptr(ft_memalloc(sizeof(t_wall)),
+		"Malloc crashed in \"./src/parse/parse_wall.c\"", data, parse);
 	wall->sector = (*parse)->cur_sector;
-	safe_call_ptr(str = skip_to("wall_", str), "Check your walls.", data);
+	safe_call_parse_ptr(str = skip_to("wall_", str),
+		"Check your walls.", data, parse);
 	get_wall_coordinates(str, wall, data);
-	if ((get_next_line((*parse)->fd, &line)) != 1)
+	ft_strdel(&(*parse)->cur_str);
+	if ((get_next_line((*parse)->fd, &(*parse)->cur_str)) != 1)
 		safe_call_int(-1, "Map error: no texture for a wall.", data);
-	get_wall_textures(line, wall, data);
-	res = safe_call_ptr(ft_twlstnew(wall, sizeof(t_wall)),
-						"Malloc crashed in \"./src/parse/parse_wall.c\"", data);
+	get_wall_textures((*parse)->cur_str, wall, data, parse);
+	res = safe_call_parse_ptr(ft_twlstnew(wall, sizeof(t_wall)),
+		"Malloc crashed in \"./src/parse/parse_wall.c\"", data, parse);
+	ft_memdel(&wall);
 	(*parse)->walls_tmp->next = res;
-	(*parse)->walls_tmp->next->prev = (*parse)->walls_tmp;
+	res->prev = (*parse)->walls_tmp;
 	(*parse)->walls_tmp = (*parse)->walls_tmp->next;
 	(*parse)->cur_sector->render->walls_count++;
-	return (res);
+	ft_strdel(&(*parse)->cur_str);
 }

@@ -24,4 +24,5 @@ void		parse_struct(t_parse **parse, t_data *data, void (*parse_thing)(t_parse **
 		ft_strdel(&(*parse)->cur_str);
 	}
 	check_error(parse, count_brackets, data);
+//	ft_strdel(&(*parse)->cur_str);
 }

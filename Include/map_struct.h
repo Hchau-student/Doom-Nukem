@@ -164,6 +164,12 @@ typedef struct			s_polygon
 	t_vec2		right_top;
 }						t_polygon;
 
+typedef struct			s_square
+{
+	t_vec2		start;
+	t_vec2		end;
+}						t_square;
+
 typedef struct			s_shoot
 {
 	t_vec3		position;
@@ -301,6 +307,7 @@ typedef struct			s_engine
 	t_player		*player;
 	t_list			*enemies;
 	t_list			*shoots;
+	t_texture		*minimap;
 }						t_engine;
 
 /*
@@ -315,11 +322,6 @@ typedef struct			s_engine
 **		не могут лежать внутри основной структуры, это будет
 **		уродством.
 */
-//
-//typedef struct		s_parse
-//{
-//	t_list			*sectors;
-//}					t_parse;
 
 /*
 **		initialization

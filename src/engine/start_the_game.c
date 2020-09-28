@@ -8,10 +8,27 @@
 **		entry point to drawing things
 */
 
-void	game_condition(t_data *data)
+static void		chose_layers(t_data *data)
+{
+	put_layer(data->sdl->tex,
+			  data->textures[1]->bit_map,
+			  data->textures[1]->width,
+			  data);
+	put_layer(data->sdl->tex,
+			  data->sdl->layers->hud->bit_map,
+			  data->sdl->layers->hud->width,
+			  data);
+	put_layer(data->sdl->tex,
+			  data->sdl->layers->minimap->bit_map,
+			  data->sdl->layers->minimap->width,
+			  data);
+}
+
+static void		game_condition(t_data *data)
 {
 	draw_hud(((t_engine *)data->engine)->player->hud, data);
-	draw_minimap(data);
+	draw_minimap(data, 5, (t_vec2){0, 0});
+	chose_layers(data);
 	update_texture(data);
 }
 
@@ -19,7 +36,7 @@ void	game_condition(t_data *data)
 **		changing game condition
 */
 
-void	start_the_game(t_data *data)
+void			start_the_game(t_data *data)
 {
 	data->go_to->mouse_event = &engine_mouse_event;
 	data->go_to->key_event = &engine_key_event;

@@ -35,7 +35,8 @@ INCL_DIR = ./includes
 C_FILES = main.c \
 		  safe_call.c \
 		  main_loop.c \
-		  scale_image.c
+		  scale_image.c \
+		  update_texture.c
 
 ENGINE_FILES = start_the_game.c \
                key_event.c \
@@ -73,7 +74,8 @@ MEMORY_FILES = init_player.c \
 		      init_window.c \
 		      init_data.c \
 		      init_textures.c \
-		      init_hud.c
+		      init_hud.c \
+		      init_window_layer.c
 # C_FILES_3D =
 
 OBJ_FILES = $(C_FILES:.c=.o)

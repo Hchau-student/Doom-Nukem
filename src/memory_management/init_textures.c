@@ -5,7 +5,7 @@
 **		works with *.bmp format; need for more (watch in subject)
 */
 
-static t_texture	*init_single_texture(char *name, t_data *data)
+t_texture			*init_single_texture(char *name, t_data *data)
 {
 	SDL_Surface		*loaded_image;
 	t_texture		*init;

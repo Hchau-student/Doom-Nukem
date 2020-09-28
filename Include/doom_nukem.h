@@ -19,11 +19,13 @@
 # include "../SDL/include/SDL.h"
 # include "parse.h"
 
-
 struct			s_vec2;
 typedef struct	s_data	t_data;
 struct			s_engine;
 struct			s_wall;
+struct			s_square;
+#define MINIMAP_H	200
+#define MINIMAP_W	200
 
 typedef enum		e_bool
 {
@@ -82,12 +84,20 @@ typedef struct		s_mouse
 	t_bool			is_pressed;
 }					t_mouse;
 
+typedef struct		s_layers
+{
+	t_texture		*minimap;
+	t_texture		*hud;
+}					t_layers;
+
 typedef struct		s_sdl
 {
 	SDL_Window		*win;
 	SDL_Renderer	*rend;
 	SDL_Rect		*rect;
-	SDL_Texture		*color_tex;
+	t_layers		*layers;
+//	t_texture		*doom_texture;
+	SDL_Texture		*target_texture;
 	SDL_Surface		*surf;
 	SDL_Texture		*tex;
 	int				indian;
@@ -127,7 +137,9 @@ struct			s_data
 
 void			init_data(t_data *data);
 void			init_sdl(t_data *data, char *name);
+void			init_sdl_layers(t_data *data);
 t_texture		**init_textures(char *path, t_data *data);
+t_texture		*init_single_texture(char *name, t_data *data);
 int				open_file(char *map_name, t_data *data);
 t_texture		*find_texture_by_name(char *name, t_data *data);
 
@@ -138,6 +150,7 @@ t_texture		*find_texture_by_name(char *name, t_data *data);
 void			remove_sdl(t_sdl **remove);
 void			remove_data(t_data *data);
 void			remove_textures(t_data *data);
+void			remove_layers(t_layers **layers);
 
 /*
 **		primitive error management
@@ -173,10 +186,12 @@ void			map_editor(t_data *data);
 **		common draw functions
 */
 
-int				scale_image(t_texture *texture, t_data *data,
-							struct s_vec2 start, struct s_vec2 end);
+int				scale_image(t_texture *src, t_texture *dst, t_data *data,
+							struct s_square borders);
 void			update_texture(t_data *data);
 void			draw_line(struct s_wall *w, uint32_t **pix_array, int color);
-void			draw_minimap(t_data *data);
+void			draw_minimap(t_data *data, uint32_t denum, struct s_vec2 start_from);
+void			put_layer(SDL_Texture *texture, uint32_t *bitmap,
+								uint32_t width, t_data *data);
 
 #endif

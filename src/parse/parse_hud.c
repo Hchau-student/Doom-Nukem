@@ -22,6 +22,8 @@ static void		parse_weapon_by_name(char *name, t_parse **parse, t_data *data)
 		i++;
 	safe_call_parse_ptr(name = skip_to("bullets", name + i),
 			   "Bullets not bullets: weapon parse error.", data, parse);
+	if ((*name < '0' || *name > '9') && (*name != '+' && *name != '-'))
+		safe_call_parse_int(-1, "Parsing num error.", data, parse);
 	weapon->bullets = ft_atoi(name);
 	weapon->i_have_it = TRUE;
 }
@@ -43,13 +45,16 @@ static void	parse_hud_main(t_parse **parse, t_data *data)
 	{
 		safe_call_parse_ptr(str = skip_to("health", str),
 			"Health not health: check hud, please.", data, parse);
-//		if ()
+		if ((*str < '0' || *str > '9') && (*str != '+' && *str != '-'))
+			safe_call_parse_int(-1, "Parsing num error.", data, parse);
 		data->engine->player->hud->health = ft_atoi(str);
 	}
 	else if (*str == 'a')
 	{
 		safe_call_parse_ptr(str = skip_to("armor", str),
 			"Armor not armor: check hud, please.", data, parse);
+		if ((*str < '0' || *str > '9') && (*str != '+' && *str != '-'))
+			safe_call_parse_int(-1, "Parsing num error.", data, parse);
 		data->engine->player->hud->armor = ft_atoi(str);
 	}
 	else

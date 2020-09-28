@@ -27,8 +27,8 @@ static int		check_borders_by_screen(t_vec2 *start, t_vec2 *end)
 	return (0);
 }
 
-int				scale_image(t_texture *texture, t_data *data,
-							   t_vec2 start, t_vec2 end)
+int				scale_image(t_texture *src, t_texture *dst, t_data *data,
+							t_square borders)
 {
 	float	i;
 	float	j;
@@ -36,22 +36,22 @@ int				scale_image(t_texture *texture, t_data *data,
 	int		start_x;
 
 	j = 0;
-	iter.x = texture->width / (end.x - start.x);
-	iter.y = texture->height / (end.y - start.y);
-	if (check_borders_by_screen(&start, &end))
+	iter.x = src->width / (borders.end.x - borders.start.x);
+	iter.y = src->height / (borders.end.y - borders.start.y);
+	if (check_borders_by_screen(&borders.start, &borders.end))
 		return (-1);
-	while (j < texture->height)
+	while (j < src->height)
 	{
 		i = 0;
-		start_x = start.x;
-		while (i < texture->width)
+		start_x = borders.start.x;
+		while (i < src->width)
 		{
-			data->sdl->color_buffer[(start_x + (int)start.y * SCREEN_WIDTH)] =
-					texture->bit_map[((int)i + (int)j * texture->width)];
+			dst->bit_map[(start_x + (int)borders.start.y * dst->width)] =
+					src->bit_map[((int)i + (int)j * src->width)];
 			i += iter.x;
 			start_x += 1;
 		}
-		start.y += 1;
+		borders.start.y += 1;
 		j += iter.y;
 	}
 	return (0);

@@ -28,16 +28,20 @@ static void		init_text(t_data *data)
 							SDL_TEXTUREACCESS_STREAMING,
 							SCREEN_WIDTH, SCREEN_HEIGHT),
 							"SDL-texture init failed.", data);
+	init_sdl_layers(data);
 	pixels = (uint32_t *)safe_call_ptr(malloc(((SCREEN_HEIGHT) *
 							(SCREEN_WIDTH)) * sizeof(uint32_t)),
 								"Crashed malloc at making bitmap!", data);
 	data->sdl->color_buffer = pixels;
-	safe_call_int(SDL_SetRenderDrawColor(data->sdl->rend, 0, 0, 0, SDL_ALPHA_OPAQUE),
+	safe_call_int(SDL_SetRenderDrawColor(data->sdl->rend, 0, 0, 0, 99),
 						"Can't clear render.", data);
 	safe_call_int(SDL_RenderClear(data->sdl->rend), "Can't clear render.", data);
 	safe_call_int(SDL_RenderCopy(data->sdl->rend, data->sdl->tex, NULL, NULL),
 			"Can't clear render.", data);
 	SDL_RenderPresent(data->sdl->rend);
+	data->sdl->target_texture = SDL_CreateTexture(data->sdl->rend, SDL_PIXELFORMAT_ARGB8888,
+				SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH * 4, SCREEN_HEIGHT);
+	SDL_SetTextureBlendMode(data->sdl->target_texture, SDL_BLENDMODE_BLEND);
 }
 
 void			init_sdl(t_data *data, char *name)
@@ -65,11 +69,16 @@ void			remove_sdl(t_sdl **remove)
 		SDL_DestroyRenderer((*remove)->rend);
 	if ((*remove)->rect != NULL)
 		ft_memdel((void **) &(*remove)->rect);
-	if ((*remove)->color_buffer != NULL)
-	{
+//	if ((*remove)->color_buffer != NULL)
+//	{
 		SDL_DestroyTexture((*remove)->tex);
 		ft_memdel((void **) &(*remove)->color_buffer);
-	}
+//	}
+	if ((*remove)->layers)
+		remove_layers(&(*remove)->layers);
+//	if ((*remove)->layers)
+//	{
+//	}
 	if ((*remove)->win != NULL)
 		SDL_DestroyWindow((*remove)->win);
 	SDL_Quit();
