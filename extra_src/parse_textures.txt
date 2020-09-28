@@ -37,3 +37,5 @@
 ./extra_src/objects/medicine.bmp
 ./extra_src/objects/armor.bmp
 ./extra_src/objects/poison.bmp
+./extra_src/minimap.bmp
+./extra_src/player_icon.bmp

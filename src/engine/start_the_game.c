@@ -26,8 +26,11 @@ static void		chose_layers(t_data *data)
 
 static void		game_condition(t_data *data)
 {
-	draw_hud(((t_engine *)data->engine)->player->hud, data);
-	draw_minimap(data, 5, (t_vec2){0, 0});
+	draw_hud(data->engine->player->hud, data);
+	data->engine->minimap->start_from = (t_vec2){0, 0};
+	data->engine->minimap->size_divider = 5;
+	draw_3d(data);
+	draw_minimap(data);
 	chose_layers(data);
 	update_texture(data);
 }

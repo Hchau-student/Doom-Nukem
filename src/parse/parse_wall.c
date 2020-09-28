@@ -5,10 +5,10 @@
 
 void			parse_wall(t_parse **parse, t_data *data)
 {
-	t_twlist	*tmp;
-	t_twlist	*del;
+	t_wall		*tmp;
+	t_wall		*del;
 
-	(*parse)->walls_tmp = ft_twlstnew(NULL, 0);
+	(*parse)->walls_tmp = ft_memalloc(sizeof(t_wall));
 	safe_call_parse_int(check_line("walls", (*parse)->cur_str),
 						"Walls not walls: check \"./src/parse/parse_wall.c\".", data, parse);
 	del = (*parse)->walls_tmp;
@@ -21,6 +21,6 @@ void			parse_wall(t_parse **parse, t_data *data)
 						"Check for error in \'t_walls\' data. There should "
 						"be closing flag \'t_walls\'.", data, parse);
 	ft_strdel(&(*parse)->cur_str);
-	ft_memdel(&del);
+	ft_memdel((void **)&del);
 	check_walls_data((*parse)->cur_sector, data);
 }

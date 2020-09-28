@@ -27,7 +27,7 @@ static int		check_borders_by_screen(t_vec2 *start, t_vec2 *end)
 	return (0);
 }
 
-int				scale_image(t_texture *src, t_texture *dst, t_data *data,
+int				scale_image(t_texture *src, t_texture *dst,
 							t_square borders)
 {
 	float	i;

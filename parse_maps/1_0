@@ -36,7 +36,7 @@ player
         armor   0
     }
     t_hud
-    position        x 38.0  y 38.0
+    position        x 200.0  y 200.0
     direction       x 0.0   z 0.5
     move            knees 0.3   ducking 0.4     eyes 1.0
     fov             90.0

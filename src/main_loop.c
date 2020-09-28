@@ -31,7 +31,7 @@ void	main_loop(t_data *data)
 			if (event.type == SDL_KEYDOWN) {
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					quit = 1;
-//				key_event(&event, draw);
+				data->go_to->key_event(&event, data);
 			}
 		}
 	}

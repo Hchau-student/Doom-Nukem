@@ -18,6 +18,8 @@
 # include "../libft/libft.h"
 # include "../SDL/include/SDL.h"
 # include "parse.h"
+# define SCREEN_WIDTH	600
+# define SCREEN_HEIGHT	500
 
 struct			s_vec2;
 typedef struct	s_data	t_data;
@@ -44,6 +46,12 @@ typedef enum	e_screen_status
 }				t_screen_status;
 
 //// TODO разобраться со шрифтами в SDL
+//
+//typedef struct		s_line
+//{
+//	struct s_vec2	start;
+//	struct s_vec2	end;
+//}					t_line;
 
 typedef struct		s_fonts
 {
@@ -52,8 +60,8 @@ typedef struct		s_fonts
 
 typedef struct		s_texture
 {
-	int 			width;
-	int 			height;
+	uint32_t		width;
+	uint32_t		height;
 	uint32_t		*bit_map;
 	char			*text_name;
 }					t_texture;
@@ -186,12 +194,10 @@ void			map_editor(t_data *data);
 **		common draw functions
 */
 
-int				scale_image(t_texture *src, t_texture *dst, t_data *data,
+int				scale_image(t_texture *src, t_texture *dst,
 							struct s_square borders);
 void			update_texture(t_data *data);
-void			draw_line(struct s_wall *w, uint32_t **pix_array, int color);
-void			draw_minimap(t_data *data, uint32_t denum, struct s_vec2 start_from);
 void			put_layer(SDL_Texture *texture, uint32_t *bitmap,
 								uint32_t width, t_data *data);
-
+void			draw_3d(t_data *data);
 #endif

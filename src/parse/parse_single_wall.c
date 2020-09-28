@@ -95,7 +95,7 @@ static void		get_wall_textures(char *str, t_wall *wall, t_data *data, t_parse **
 
 void			parse_single_wall(t_parse **parse, t_data *data)
 {
-	t_twlist	*res;
+//	t_wall 		*res;
 	t_wall		*wall;
 	char		*str;
 
@@ -110,11 +110,11 @@ void			parse_single_wall(t_parse **parse, t_data *data)
 	if ((get_next_line((*parse)->fd, &(*parse)->cur_str)) != 1)
 		safe_call_int(-1, "Map error: no texture for a wall.", data);
 	get_wall_textures((*parse)->cur_str, wall, data, parse);
-	res = safe_call_parse_ptr(ft_twlstnew(wall, sizeof(t_wall)),
-		"Malloc crashed in \"./src/parse/parse_wall.c\"", data, parse);
-	ft_memdel(&wall);
-	(*parse)->walls_tmp->next = res;
-	res->prev = (*parse)->walls_tmp;
+//	res = safe_call_parse_ptr(ft_memalloc(sizeof(t_wall)),
+//		"Malloc crashed in \"./src/parse/parse_wall.c\"", data, parse);
+//	ft_memdel((void **)&wall);
+	(*parse)->walls_tmp->next = wall;
+	wall->prev = (*parse)->walls_tmp;
 	(*parse)->walls_tmp = (*parse)->walls_tmp->next;
 	(*parse)->cur_sector->render->walls_count++;
 	ft_strdel(&(*parse)->cur_str);

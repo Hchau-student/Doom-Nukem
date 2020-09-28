@@ -19,9 +19,8 @@
 # include <math.h>
 # include "../SDL/include/SDL.h"
 #include "objects.h"
-# define SCREEN_WIDTH	600
-# define SCREEN_HEIGHT	500
 # define CENTRE_W		SCREEN_WIDTH / 2
+
 /*
 **		sorry not sorry; need this for my calculations
 */
@@ -141,6 +140,12 @@ typedef struct			s_vec2
 	float				y;
 }						t_vec2;
 
+typedef struct			s_ivec2
+{
+	int					x;
+	int					y;
+}						t_ivec2;
+
 typedef struct			s_vec3
 {
 	float	x;
@@ -169,6 +174,12 @@ typedef struct			s_square
 	t_vec2		start;
 	t_vec2		end;
 }						t_square;
+
+typedef struct			s_line
+{
+	t_ivec2				start;
+	t_ivec2				end;
+}						t_line;
 
 typedef struct			s_shoot
 {
@@ -215,6 +226,8 @@ struct					s_wall
 	t_wall		*portal_to;
 	t_sector	*sector;
 	t_texture	*textures[3];
+	t_wall		*next;
+	t_wall		*prev;
 };
 
 typedef struct			s_move
@@ -252,8 +265,8 @@ typedef struct			s_player
 	t_move			*move;
 	float			fov;
 	t_display_hud	*hud;
-	int32_t			current_sector;
-	t_sector		*cur_sec;
+//	int32_t			current_sector;
+	t_sector		*current_sector;
 	//velocity
 }						t_player;
 
@@ -265,21 +278,14 @@ typedef struct			s_player
 
 typedef struct			s_sector_render
 {
-	t_twlist	*walls;
+//	t_twlist	*walls;
+	t_wall		*walls;
 	int32_t		walls_count;
 	float		floor_height;
 	float		ceiling_height;
 	t_texture	*textures[2];
 	uint32_t		light;//light color???
 }						t_sector_render;
-
-/*
-**	what if we could throw those walls to the t_sector_render?
-**	t_twlist		*walls;
-**	int32_t			walls_count;
-**	t_texture		*textures[2];
-**	neighbors are for searching current sector for the player; won't be sorted
-*/
 
 struct					s_sector
 {
@@ -298,6 +304,15 @@ struct					s_sector
 **		the main structure of engine
 */
 
+typedef struct			s_minimap
+{
+	t_texture		*texture;
+	t_texture		*background;
+	t_texture		*player_icon;
+	t_vec2			start_from;
+	float			size_divider;
+}						t_minimap;
+
 typedef struct			s_engine
 {
 	t_sdl			*sdl;
@@ -307,7 +322,7 @@ typedef struct			s_engine
 	t_player		*player;
 	t_list			*enemies;
 	t_list			*shoots;
-	t_texture		*minimap;
+	t_minimap		*minimap;
 }						t_engine;
 
 /*
@@ -355,11 +370,27 @@ void			engine_mouse_event();
 */
 
 void			draw_hud(t_display_hud *hud, t_data *data);
+void			draw_line(t_line line, t_texture *pix_array, int color);
+
+/*
+**		draw minimap
+*/
+
+void			draw_minimap(t_data *data);
+void			draw_minimap_background(t_minimap *minimap);
+void			draw_minimap_player(t_data *data);
+void			draw_minimap_sectors(t_data *data);
 
 /*
 **		tools for objects
 */
 
 t_weapon		*find_weapon_by_name(char *name, t_data *data);
+
+/*
+**		???
+*/
+
+uint32_t		is_inside(float x, float y, t_sector_render *sector);
 
 #endif

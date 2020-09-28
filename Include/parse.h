@@ -10,6 +10,7 @@
 
 struct s_sector;
 struct s_data;
+struct s_wall;
 
 /*
 **		we don't actually know, how much of everything do we have
@@ -38,7 +39,7 @@ typedef struct		s_parse
 //	char			*error_message;
 	t_list			*obj;
 	char			letter;
-	t_twlist		*walls_tmp;
+	struct s_wall	*walls_tmp;
 }					t_parse;
 
 /*

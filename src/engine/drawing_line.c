@@ -4,12 +4,12 @@
 #include "../../Include/doom_nukem.h"
 #include "../../Include/map_struct.h"
 
-void	draw_line(t_wall *w, uint32_t **pix_array, int color)
+void	draw_line(t_line line, t_texture *texture, int color)
 {
-	int		x0 = w->left.x;
-	int		x1 = w->right.x;
-	int		y0 = w->left.y;
-	int		y1 = w->right.y;
+	int		x0 = line.start.x;
+	int		x1 = line.end.x;
+	int		y0 = line.start.y;
+	int		y1 = line.end.y;
 
 	int deltax = abs(x1 - x0);
 	int deltay = abs(y1 - y0);
@@ -25,8 +25,8 @@ void	draw_line(t_wall *w, uint32_t **pix_array, int color)
 	int dirx = x0 < x1 ? 1 : -1;
 	if (abs(x1 - x0) > abs(y1 - y0)) {
 		while (x != x1) {
-			if (x >= 0 && y >= 0 && x < SCREEN_WIDTH && y < SCREEN_HEIGHT)
-				((uint32_t *)(*pix_array))[((x) + y * SCREEN_WIDTH) - 0] = color;
+			if (x >= 0 && y >= 0 && x < (int)texture->width && y < (int)texture->height)
+				texture->bit_map[((x) + y * texture->width) - 0] = color;
 			error = error + deltaerr;
 			if (error >= (deltax + 1)) {
 				y = y + diry;
@@ -44,8 +44,8 @@ void	draw_line(t_wall *w, uint32_t **pix_array, int color)
 			dirx = -1;
 		int deltaerr = (deltax + 1);
 		while (y != y1) {
-			if (x >= 0 && y >= 0 && x < SCREEN_WIDTH && y < SCREEN_HEIGHT)
-				((uint32_t *)(*pix_array))[((x) + y * SCREEN_WIDTH) - 0] = color;
+			if (x >= 0 && y >= 0 && x < (int)texture->width && y < (int)texture->height)
+				texture->bit_map[((x) + y * texture->width) - 0] = color;
 			error = error + deltaerr;
 			if (error >= (deltay + 1)) {
 				x = x + dirx;

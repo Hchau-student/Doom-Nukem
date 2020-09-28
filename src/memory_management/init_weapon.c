@@ -6,7 +6,11 @@
 
 static void		standard_shoot(struct s_shoot *shoot, void *obj)
 {
+	t_shoot		*s;
+	t_obj		*o;
 
+	s = shoot;
+	o = obj;
 }
 
 static t_shoot		*init_shoot(t_data *data, char *shoot_name)

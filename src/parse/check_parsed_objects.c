@@ -6,5 +6,7 @@
 
 void		check_objects_data(struct s_sector *sector, struct s_data *data)
 {
-
+	t_sector	*s;
+	safe_call_int(0, "check", data);
+	s = sector;
 }

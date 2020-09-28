@@ -23,6 +23,7 @@ static void		parse_position(t_parse **parse, t_data *data)
 	if (*str)
 		safe_call_parse_int(-1,
 				"Extra characters: player\'s position.", data, parse);
+	data->engine->player->position = position;
 }
 
 static void		parse_direction(t_parse **parse, t_data *data)
@@ -45,6 +46,7 @@ static void		parse_direction(t_parse **parse, t_data *data)
 	if (*str)
 		safe_call_parse_int(-1,
 				"Extra characters: player\'s direction.", data, parse);
+	data->engine->player->direction_angle = direction;
 }
 
 static void		parse_move_floats(t_parse **parse, t_move *move, t_data *data)

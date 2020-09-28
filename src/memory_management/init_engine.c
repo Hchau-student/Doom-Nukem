@@ -6,20 +6,24 @@
 
 static void		remove_object(void *obj, size_t size)
 {
+	size = 0;
 	if (((t_obj *)obj)->type == HEALTH_OBJ)
 		ft_memdel((void **)&((t_health_obj *)obj)->place);
 }
 
 static void		remove_walls(t_sector_render *remove)
 {
-	t_twlist	*tmp;
+	t_wall		*tmp;
+	int			i;
 
-	while (remove->walls)
+	i = 0;
+	while (i < remove->walls_count)
+//	while ((remove)->walls)
 	{
-		tmp = remove->walls->next;
-		ft_memdel(&remove->walls->content);
-		ft_memdel(&remove->walls);
-		remove->walls = tmp;
+		tmp = (remove)->walls->next;
+		ft_memdel((void **)&(remove->walls));
+		(remove)->walls = tmp;
+		i++;
 	}
 }
 
@@ -32,7 +36,7 @@ static void		remove_sectors(t_engine **engine)
 	tmp = *engine;
 	while (i < tmp->sectors_count)
 	{
-		remove_walls(&tmp->sectors[i].render);
+		remove_walls((tmp->sectors[i].render));
 		ft_memdel((void **)&tmp->sectors[i].render);
 		ft_lstdel(&tmp->sectors[i].objects, &remove_object);
 		i++;
@@ -56,20 +60,24 @@ void			remove_engine(t_data *data)
 	ft_memdel((void **)&data->engine);
 }
 
-void	create_minimap(t_data *data)
+void	init_minimap(t_data *data)
 {
-//	int			i;
-//	int			j;
-	t_texture	*minimap;
+	uint32_t		i;
+	uint32_t		max;
+	t_texture		*touch;
 
-	minimap = (ft_memalloc(sizeof(t_texture)));
-//	minimap->height = MINIMAP_H;
-//	minimap->width = MINIMAP_W;
-	minimap->height = SCREEN_HEIGHT;
-	minimap->width = SCREEN_WIDTH;
-	minimap->bit_map =
-			(ft_memalloc(sizeof(uint32_t) * minimap->height * minimap->width));
-	data->engine->minimap = minimap;
+	i = 0;
+	data->engine->minimap = ft_memalloc(sizeof(t_minimap));
+	data->engine->minimap->texture = data->sdl->layers->minimap;
+	data->engine->minimap->player_icon = find_texture_by_name("player_icon", data);
+	data->engine->minimap->background = find_texture_by_name("minimap", data);
+	max = (data->engine->minimap->background->height) * (data->engine->minimap->background->width);
+	touch = data->engine->minimap->background;
+	while (i < max)
+	{
+		touch->bit_map[i] -= 0x40000000;
+		i++;
+	}
 }
 
 void	init_engine(t_data *data)
@@ -83,6 +91,6 @@ void	init_engine(t_data *data)
 	engine->textures = data->textures;
 //	engine->minimap = (t_texture *)safe_call_ptr(ft_memalloc(sizeof(t_texture)),
 //						"Malloc crashed: engine init", data);
-	create_minimap(data);
+	init_minimap(data);
 	engine->player = init_player(data);
 }

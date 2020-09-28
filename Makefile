@@ -44,7 +44,10 @@ ENGINE_FILES = start_the_game.c \
                draw_hud.c \
                tools_weapon.c \
                draw_minimap.c \
-               drawing_line.c
+               draw_minimap_tools.c \
+               drawing_line.c \
+               draw_3d_main.c \
+               is_inside.c
 
 MENU_FILES = menu.c \
              load_game.c \

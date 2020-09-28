@@ -40,11 +40,10 @@ static void		parse_file(int fd, t_data *data)
 		else if (letter == 'p')
 			parse_player(&parse, data);
 		ft_strdel(&parse->cur_str);
-		//распихать все данные в *engine
 	}
 	safe_call_parse_int(parse->gnl_read_flag, "Read error: gnl returned -1.", data, &parse);
-//	if (parse->player_hud_parsed != 1 || parse->player_parsed != 1)
-//		safe_call_parse_int(-1, "Player and hud should be in your map. Once.", data, &parse);
+	if (parse->player_hud_parsed != 1 || parse->player_parsed != 1)
+		safe_call_parse_int(-1, "Player and hud should be in your map. Once.", data, &parse);
 	ft_strdel(&parse->cur_str);
 	data->engine->sectors_count = parse->sector_index;
 	remove_parse(&parse);

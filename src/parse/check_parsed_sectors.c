@@ -13,6 +13,9 @@ void		check_sector_crossing()
 
 void		check_sector_data(struct s_sector *sector, struct s_data *data)
 {
+	t_sector	*s;
 
+	safe_call_int(0, "check", data);
+	s = sector;
 }
 //проверить, все ли порталы есть в двух (и только двух) секторах
