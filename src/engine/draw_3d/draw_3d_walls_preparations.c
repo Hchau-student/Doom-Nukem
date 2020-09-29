@@ -65,14 +65,16 @@ void	wall_extremes(t_data *data, t_wall w, t_wall *borders, float *end_x)
 	left_h = wall_h(w.left, w.height, data->engine->player);
 	*end_x = right;
 	borders->left.x = left;
-	borders->left.y = ZERO_FLOOR - (left_h * (1.0 - (float)w.sector->render->floor_height / 100.0));
-	borders->right.y = ZERO_FLOOR + (left_h * ((float)w.sector->render->floor_height / 100.0));
+	borders->left.z = wall_h(w.left, (float)w.sector->render->floor_height, data->engine->player);
+	borders->right.z = wall_h(w.right, (float)w.sector->render->floor_height, data->engine->player);
+	borders->left.y = ZERO_FLOOR - left_h - borders->left.z;
+	borders->right.y = ZERO_FLOOR + borders->left.z;
 	if (borders->left.x > *end_x)
 	{
 		*end_x = left;
 		borders->left.x = right;
-		borders->left.y = ZERO_FLOOR - (right_h * (1.0 - (float)w.sector->render->floor_height / 100.0));
-		borders->right.y = ZERO_FLOOR + (right_h * ((float)w.sector->render->floor_height / 100.0));
+		borders->left.y = ZERO_FLOOR - right_h - borders->right.z;
+		borders->right.y = ZERO_FLOOR + borders->right.z;
 	}
 }
 

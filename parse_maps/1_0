@@ -2,7 +2,7 @@ sector
 {
     type                normal
     light               0x99999999
-    floor 10.0          Eda
+    floor 20.0          Eda
     ceiling 60.0        Dicksy
     walls
     {
@@ -47,7 +47,7 @@ sector
 {
     type                normal
     light               0x99999999
-    floor   30.0          Eda
+    floor   20.0          Eda
     ceiling 90.0        Dicksy
     walls
     {
@@ -76,12 +76,12 @@ sector
 {
     type                normal
     light               0x99999999
-    floor  0.0          Eda
-    ceiling 40.0        Dicksy
+    floor  70.0         Eda
+    ceiling 90.0        Dicksy
     walls
     {
         wall_0  x1 550.0    y1 450.0    x2 550.0    y2 420.0    type    normal
-        textures bedy_c_mamami
+        textures Tchaikoff
         wall_3  x1 220.0    y1 300.0    x2 550.0    y2 420.0    type    portal
         textures bedy_c_mamami          bedy_c_mamami
         wall_1  x1 220.0    y1 350.0    x2 220.0    y2 300.0    type    normal
@@ -105,7 +105,7 @@ sector
 {
     type                normal
     light               0x99999999
-    floor 0.0           Eda
+    floor 70.0           Eda
     ceiling 2000.0       Dicksy
     walls
     {

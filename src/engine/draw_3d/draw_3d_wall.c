@@ -59,11 +59,12 @@ float 	find_textel(float angle, t_vec3 textels, t_vec3 dist, int text_max)
 	return t_start_x;
 }
 
-void	inverse_steps(t_vec2 *step, float *angle)
+void	inverse_steps(t_vec2 *step, float *angle, t_wall *borders)
 {
 	step->y *= -1;
 	*angle = 1;
 	step->x *= -1;
+	borders->left.z *= -1;
 }
 
 void	texturing_algorithm(t_wall w, t_wall *text_extremes, t_data *data, t_wall *w_origin)
@@ -77,13 +78,15 @@ void	texturing_algorithm(t_wall w, t_wall *text_extremes, t_data *data, t_wall *
 	wall_extremes(data, w, &borders, &end_x);
 	step.y = (wall_h(w.left, w.height, data->engine->player)
 			  - wall_h(w.right, w.height, data->engine->player)) / (end_x - borders.left.x);
+	borders.left.z = (borders.left.z
+					  - borders.right.z) / (end_x - borders.left.x);
 	/*
 	**	TODO step.y for borders.right.y
 	*/
 	angle = 0;
 	step.x = (1.0) / (end_x - borders.left.x);
 	if (find_angle(data, w.left) > find_angle(data, w.right))
-		inverse_steps(&step, &angle);
+		inverse_steps(&step, &angle, &borders);
 	while (borders.left.x < end_x)
 	{
 		borders.right.x = (int)borders.left.x;
@@ -91,8 +94,8 @@ void	texturing_algorithm(t_wall w, t_wall *text_extremes, t_data *data, t_wall *
 			text_extremes->right, w_origin->textures[WALL_TEXT]->width);
 		data_text(borders, t_start_x, w_origin->textures[WALL_TEXT], data);
 		borders.left.x = (int)borders.left.x + 1;
-		borders.left.y += step.y * (1.0 - (float)w.sector->render->floor_height / 100.0);
-		borders.right.y -= step.y * ((float)w.sector->render->floor_height / 100.0);
+		borders.left.y += step.y + borders.left.z;
+		borders.right.y -= borders.left.z;
 		angle += step.x;
 	}
 }

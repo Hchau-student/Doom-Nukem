@@ -7,7 +7,7 @@
 
 #include "map_struct.h"
 
-#define ZERO_FLOOR	(float)SCREEN_HEIGHT / 1.2
+#define ZERO_FLOOR	(float)SCREEN_HEIGHT / 2
 /*
 **		wall destination
 */
