@@ -25,6 +25,7 @@ void		init_sdl_layers(t_data *data)
 		"in \"init_layers\" function.", data);
 	init_single_layer(&data->sdl->layers->minimap, data);
 	init_single_layer(&data->sdl->layers->hud, data);
+	init_single_layer(&data->sdl->layers->draw_3d, data);
 }
 
 void		remove_layers(t_layers **layers)

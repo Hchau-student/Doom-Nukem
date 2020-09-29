@@ -15,6 +15,10 @@ static void		chose_layers(t_data *data)
 			  data->textures[1]->width,
 			  data);
 	put_layer(data->sdl->tex,
+			  data->sdl->layers->draw_3d->bit_map,
+			  data->sdl->layers->draw_3d->width,
+			  data);
+	put_layer(data->sdl->tex,
 			  data->sdl->layers->hud->bit_map,
 			  data->sdl->layers->hud->width,
 			  data);

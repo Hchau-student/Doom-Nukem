@@ -13,12 +13,8 @@ struct s_data;
 struct s_wall;
 
 /*
-**		we don't actually know, how much of everything do we have
-**		while we parse, so lists indeed!
-*/
-
-/*
-**		это для утечек
+**		это для утечек, проверок данных
+**		и всего-всего-всего
 */
 
 typedef struct		s_parse
@@ -36,7 +32,6 @@ typedef struct		s_parse
 	struct s_sector	*cur_sector;
 	int64_t			fd;
 	int64_t			sector_index;
-//	char			*error_message;
 	t_list			*obj;
 	char			letter;
 	struct s_wall	*walls_tmp;
@@ -62,9 +57,10 @@ void			parse_player_line(t_parse **parse, struct s_data *data);
 */
 
 void		check_walls_data(struct s_sector *sector, struct s_data *data);
+void		check_portals_data(struct s_data *data, t_parse *parse);
 
 //проверить, не пересекают ли стены друг друга
-void		check_sector_data(struct s_sector *sector, struct s_data *data);
+void		check_sector_data(struct s_sector *sector, struct s_data *data, t_parse *parse);
 void		check_objects_data(struct s_sector *sector, struct s_data *data);
 //проверить, все ли объекты находятся в обозначенных секторах,
 //переназначить сектора, если нужно

@@ -15,7 +15,10 @@ static void		draw_wall_minimap(t_wall *wall, t_data *data)
 	line.start.y = (wall->left.y - minimap->start_from.y) / minimap->size_divider;
 	line.end.x = (wall->right.x - minimap->start_from.x) / minimap->size_divider;
 	line.end.y = (wall->right.y - minimap->start_from.y) / minimap->size_divider;
-	draw_line(line, data->sdl->layers->minimap, 0xFF00FFFF);
+	if (wall->type == WALL)
+		draw_line(line, data->sdl->layers->minimap, 0xFF00FFFF);
+	else
+		draw_line(line, data->sdl->layers->minimap, 0xFFFF00FF);
 }
 
 static void		draw_walls_minimap(t_sector_render *sector, t_data *data)

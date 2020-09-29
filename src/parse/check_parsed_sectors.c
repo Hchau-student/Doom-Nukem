@@ -11,10 +11,11 @@ void		check_sector_crossing()
 
 }
 
-void		check_sector_data(struct s_sector *sector, struct s_data *data)
+void		check_sector_data(struct s_sector *sector, struct s_data *data, t_parse *parse)
 {
 	t_sector	*s;
 
+	check_portals_data(data, parse);
 	safe_call_int(0, "check", data);
 	s = sector;
 }

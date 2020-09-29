@@ -25,7 +25,7 @@ ENGINE_DIR = ./src/engine
 PARSE_DIR = ./src/parse
 MENU_DIR = ./src/menu
 MEMORY_DIR = ./src/memory_management
-
+DRAW_3D_DIR = ./src/engine/draw_3d
 # SRC_3D_DIR = ./s
 
 OBJ_DIR = ./obj
@@ -46,8 +46,11 @@ ENGINE_FILES = start_the_game.c \
                draw_minimap.c \
                draw_minimap_tools.c \
                drawing_line.c \
-               draw_3d_main.c \
                is_inside.c
+
+DRAW_3D_FILES = draw_3d_main.c \
+                draw_3d_wall.c \
+                wall_horizontal_clipping.c
 
 MENU_FILES = menu.c \
              load_game.c \
@@ -68,6 +71,7 @@ PARSE_FILES = parse.c \
               check_parsed_walls.c \
               check_parsed_objects.c \
               check_parsed_sectors.c \
+              check_portal_data.c \
               safe_call.c \
               parse_struct.c
 
@@ -87,6 +91,7 @@ OBJ_FILES_ENGINE = $(ENGINE_FILES:.c=.o)
 OBJ_FILES_PARSE = $(PARSE_FILES:.c=.o)
 OBJ_FILES_MENU = $(MENU_FILES:.c=.o)
 OBJ_FILES_MEMORY = $(MEMORY_FILES:.c=.o)
+OBJ_DRAW_3D = $(DRAW_3D_FILES:.c=.o)
 
 RAW_OBJ_FILES = $(addprefix $(OBJ_DIR)/1_,$(OBJ_FILES))
 # RAW_OBJ_FILES_3D = $(addprefix $(OBJ_DIR)/2_,$(OBJ_FILES_3D))
@@ -94,6 +99,7 @@ RAW_OBJ_FILES_ENGINE = $(addprefix $(OBJ_DIR)/3_,$(OBJ_FILES_ENGINE))
 RAW_OBJ_FILES_PARSE = $(addprefix $(OBJ_DIR)/4_,$(OBJ_FILES_PARSE))
 RAW_OBJ_FILES_MENU = $(addprefix $(OBJ_DIR)/5_,$(OBJ_FILES_MENU))
 RAW_OBJ_FILES_MEMORY = $(addprefix $(OBJ_DIR)/6_,$(OBJ_FILES_MEMORY))
+RAW_OBJ_FILES_DRAW_3D = $(addprefix $(OBJ_DIR)/7_,$(OBJ_DRAW_3D))
 
 DEPS = $(RAW_OBJ_FILES:.o=.d)
 # DEPS_PARSING = $(RAW_OBJ_FILES_3D:.o=.d)
@@ -150,9 +156,10 @@ $(OBJ_DIR):
 
 $(NAME): ./libft/libft.a $(SDL_DIST) $(RAW_OBJ_FILES) \
 	$(RAW_OBJ_FILES_ENGINE) $(RAW_OBJ_FILES_PARSE) $(RAW_OBJ_FILES_MENU) \
-	$(RAW_OBJ_FILES_MEMORY)
+	$(RAW_OBJ_FILES_MEMORY) $(RAW_OBJ_FILES_DRAW_3D)
 	gcc -o $(NAME) $(RAW_OBJ_FILES) $(RAW_OBJ_FILES_MEMORY) \
-	$(RAW_OBJ_FILES_ENGINE) $(RAW_OBJ_FILES_PARSE) $(RAW_OBJ_FILES_MENU) $(LDFLAGS)
+	$(RAW_OBJ_FILES_ENGINE) $(RAW_OBJ_FILES_PARSE) \
+	$(RAW_OBJ_FILES_MENU) $(RAW_OBJ_FILES_DRAW_3D) $(LDFLAGS)
 	@echo "$(PINK)(*≧ω≦*)  $(BLUE)Mama, ya sobralsya  $(PINK)(*≧ω≦*)"
 # 	@sh /Users/hchau/Desktop/hohow/priv.sh
 
@@ -189,6 +196,10 @@ $(OBJ_DIR)/5_%.o: $(MENU_DIR)/%.c | $(OBJ_DIR)
 
 -include $(DEPS)
 $(OBJ_DIR)/6_%.o: $(MEMORY_DIR)/%.c | $(OBJ_DIR)
+	gcc $(CFLAGS_FINAL) -c $< -o $@
+
+-include $(DEPS)
+$(OBJ_DIR)/7_%.o: $(DRAW_3D_DIR)/%.c | $(OBJ_DIR)
 	gcc $(CFLAGS_FINAL) -c $< -o $@
 
 clean: clean_libs clean_SDL clean_self

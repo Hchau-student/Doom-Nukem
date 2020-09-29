@@ -114,6 +114,6 @@ static void		check_walls_cycle(struct s_sector *sector, struct s_data *data)
 
 void			check_walls_data(struct s_sector *sector, struct s_data *data)
 {
-	check_walls_cycle(sector, data);
-	check_walls_cross(sector, data);
+//	check_walls_cycle(sector, data);
+//	check_walls_cross(sector, data);
 }

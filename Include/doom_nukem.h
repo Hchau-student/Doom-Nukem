@@ -96,6 +96,7 @@ typedef struct		s_layers
 {
 	t_texture		*minimap;
 	t_texture		*hud;
+	t_texture		*draw_3d;
 }					t_layers;
 
 typedef struct		s_sdl

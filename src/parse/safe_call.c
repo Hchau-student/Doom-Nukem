@@ -20,7 +20,6 @@ void		remove_parse(t_parse **parse)
 	while (lst)
 	{
 		tmp = lst->next;
-		ft_memdel(&lst->content);
 		ft_memdel((void **)&lst);
 		lst = tmp;
 	}

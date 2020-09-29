@@ -39,3 +39,5 @@
 ./extra_src/objects/poison.bmp
 ./extra_src/minimap.bmp
 ./extra_src/player_icon.bmp
+./extra_src/sky.bmp
+./extra_src/ground.bmp

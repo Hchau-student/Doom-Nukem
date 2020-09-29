@@ -55,7 +55,7 @@ uint32_t		is_inside(float x, float y, t_sector_render *sector)
 	wal = sector->walls;
 	i = sector->walls_count;
 	cross_counter = 0;
-	while (i >= 0)
+	while (i > 0)
 	{
 		if ((y - wal->left.y) * (y - wal->right.y) < 0)
 		{
@@ -68,7 +68,7 @@ uint32_t		is_inside(float x, float y, t_sector_render *sector)
 				cross_counter += is_rhs(x, y, wal);
 			}
 		}
-		wal++;
+		wal = wal->next;
 		i--;
 	}
 	return (cross_counter);
