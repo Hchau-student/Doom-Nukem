@@ -36,7 +36,8 @@ C_FILES = main.c \
 		  safe_call.c \
 		  main_loop.c \
 		  scale_image.c \
-		  update_texture.c
+		  update_texture.c \
+		  clear_keysum.c
 
 ENGINE_FILES = start_the_game.c \
                key_event.c \
@@ -50,7 +51,8 @@ ENGINE_FILES = start_the_game.c \
 
 DRAW_3D_FILES = draw_3d_main.c \
                 draw_3d_wall.c \
-                wall_horizontal_clipping.c
+                wall_horizontal_clipping.c \
+                draw_3d_walls_preparations.c
 
 MENU_FILES = menu.c \
              load_game.c \

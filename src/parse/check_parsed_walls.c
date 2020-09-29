@@ -103,17 +103,19 @@ static void		check_walls_cycle(struct s_sector *sector, struct s_data *data)
 	{
 		i++;
 		wall->next->prev = wall;
+		wall->height = sector->render->ceiling_height - sector->render->floor_height;
 		if (!(check_wall_connect(wall,
-					wall->next, wall->prev)))
+					wall->next, wall->prev)) || wall->height <= 0)
 		{
 			safe_call_int(-1, "Walls data is wrong. "
 			"./src/parse/check_parsed_walls.c.", data);
 		}
+		wall = wall->next;
 	}
 }
 
 void			check_walls_data(struct s_sector *sector, struct s_data *data)
 {
-//	check_walls_cycle(sector, data);
-//	check_walls_cross(sector, data);
+	check_walls_cycle(sector, data);
+	check_walls_cross(sector, data);
 }

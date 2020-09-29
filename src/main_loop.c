@@ -13,22 +13,21 @@ void	main_loop(t_data *data)
 //    int KEYS[322]; если нужно запомнить клаву, крутой пример
 	while(!quit) {
 		data->go_to->condition(data);
-		while (SDL_PollEvent(&event)) {
-			//выведение битмапы
-//			win->update_texture(win, draw);
-//			win3d->update_texture(win3d, draw);
-
+		while (SDL_PollEvent(&event))
+		{
 //			mouse_events(event, draw, &is_pressed);
 //			SDL_PumpEvents(); // обработчик событий.
 			if(event.type == SDL_QUIT)
 				quit=1;
 			if (quit == 1) {
-//				SDL_DestroyWindow(data->sdl->win);
-//				SDL_Quit();
-//				exit(0);
 				remove_data(data);
 			}
 			if (event.type == SDL_KEYDOWN) {
+				if (event.key.keysym.sym == SDLK_ESCAPE)
+					quit = 1;
+				data->go_to->key_event(&event, data);
+			}
+			if (event.type == SDL_KEYUP) {
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					quit = 1;
 				data->go_to->key_event(&event, data);

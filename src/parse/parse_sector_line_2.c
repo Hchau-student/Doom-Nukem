@@ -49,7 +49,7 @@ static void			parse_floor(t_parse **parse, t_data *data)
 	safe_call_parse_ptr((str = skip_to("floor", str)),
 		"Parsing error: check in \"parse_floor\","
 				"\"./src/parse/parse_line.c\".", data, parse);
-	if (*str >= '0' && *str <= '9')
+	if ((*str >= '0' && *str <= '9') || *str == '-')
 	{
 		safe_call_parse_ptr((str = parse_float(str, &(*parse)->cur_sector->render->floor_height)),
 					"Parsing error: check in \"parse_floor\","
@@ -78,12 +78,12 @@ static void			parse_ceiling(t_parse **parse, t_data *data)
 
 	str = (*parse)->cur_str;
 	safe_call_parse_ptr((str = skip_to("ceiling", str)),
-				"Parsing error: check in \"parse_floor\","
+				"Parsing error: check in \"parse_ceiling\","
 				"\"./src/parse/parse_line.c\".", data, parse);
-	if (*str >= '0' && *str <= '9')
+	if ((*str >= '0' && *str <= '9') || *str == '-')
 	{
-		safe_call_parse_ptr((str = parse_float(str, &(*parse)->cur_sector->render->floor_height)),
-					"Parsing error: check in \"parse_floor\","
+		safe_call_parse_ptr((str = parse_float(str, &(*parse)->cur_sector->render->ceiling_height)),
+					"Parsing error: check in \"parse_ceiling\","
 					"\"./src/parse/parse_line.c\".", data, parse);
 		(*parse)->cur_sector->render->textures[CEILING_TEXT] =
 				find_texture_by_name(str, data);

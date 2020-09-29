@@ -18,8 +18,8 @@
 # include "../libft/libft.h"
 # include "../SDL/include/SDL.h"
 # include "parse.h"
-# define SCREEN_WIDTH	600
-# define SCREEN_HEIGHT	500
+# define SCREEN_WIDTH	600 * 1.2
+# define SCREEN_HEIGHT	500 * 1.2
 
 struct			s_vec2;
 typedef struct	s_data	t_data;
@@ -28,6 +28,19 @@ struct			s_wall;
 struct			s_square;
 #define MINIMAP_H	200
 #define MINIMAP_W	200
+
+typedef enum		e_keycode
+{
+	LEFT_ARROW,
+	RIGHT_ARROW,
+	TOP_ARROW,
+	DOWN_ARROW,
+	CONTROL,
+	SHIFT,
+	ENTER,
+	ESCAPE,
+	MAX_KEYCODE = 256
+}					t_keycode;
 
 typedef enum		e_bool
 {
@@ -111,6 +124,7 @@ typedef struct		s_sdl
 	SDL_Texture		*tex;
 	int				indian;
 	uint32_t		*color_buffer;
+	int				key_pressed[MAX_KEYCODE];
 }					t_sdl;
 
 /*
@@ -201,4 +215,11 @@ void			update_texture(t_data *data);
 void			put_layer(SDL_Texture *texture, uint32_t *bitmap,
 								uint32_t width, t_data *data);
 void			draw_3d(t_data *data);
+
+/*
+**		clear keysum
+*/
+
+void	clear_keysum(t_data *data);
+
 #endif

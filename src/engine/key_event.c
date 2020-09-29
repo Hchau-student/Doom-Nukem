@@ -7,17 +7,15 @@
 void	engine_key_event(SDL_Event *event, t_data *data)
 {
 	if (event->key.keysym.sym == SDLK_RIGHT)
-		data->engine->player->direction_angle.x += 0.1;
-	if (event->key.keysym.sym == SDLK_LEFT)
-		data->engine->player->direction_angle.x -= 0.1;
-	if (event->key.keysym.sym == SDLK_w)
-	{
-		data->engine->player->position.x += cos(data->engine->player->direction_angle.x) * 2;
-		data->engine->player->position.y += sin(data->engine->player->direction_angle.x) * 2;
-	}
-	if (event->key.keysym.sym == SDLK_s)
-	{
-		data->engine->player->position.x -= cos(data->engine->player->direction_angle.x) * 2;
-		data->engine->player->position.y -= sin(data->engine->player->direction_angle.x) * 2;
-	}
+		data->sdl->key_pressed[RIGHT_ARROW] = event->type == SDL_KEYDOWN;
+	else if (event->key.keysym.sym == SDLK_LEFT)
+		data->sdl->key_pressed[LEFT_ARROW] = event->type == SDL_KEYDOWN;
+	else if (event->key.keysym.sym == SDLK_w)
+		data->sdl->key_pressed['W'] = event->type == SDL_KEYDOWN;
+	else if (event->key.keysym.sym == SDLK_s)
+		data->sdl->key_pressed['S'] = event->type == SDL_KEYDOWN;
+	else if (event->key.keysym.sym == SDLK_a)
+		data->sdl->key_pressed['A'] = event->type == SDL_KEYDOWN;
+	else if (event->key.keysym.sym == SDLK_d)
+		data->sdl->key_pressed['D'] = event->type == SDL_KEYDOWN;
 }

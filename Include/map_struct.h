@@ -222,6 +222,7 @@ struct					s_wall
 	int8_t		type;
 	t_vec3		left;
 	t_vec3		right;
+	float		height;
 	float		length;
 	t_wall		*portal_to;
 	t_sector	*sector;

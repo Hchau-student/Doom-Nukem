@@ -56,11 +56,18 @@ char		*parse_float(char *str, float *box)
 	float	res;
 	int		i;
 	char	flag;
+	char	sign;
 //	char	box;
 
 	i = 0;
+	sign = 1;
 	while (*str && (*str == ' ' || *str == '\t' || *str == '\r'))
 		str++;
+	if (*str == '-')
+	{
+		sign = -1;
+		str++;
+	}
 	if (*str < '0' || *str > '9')
 		return (NULL);
 	while (str[i] && ((str[i] >= '0' && str[i] <= '9')))
@@ -82,6 +89,7 @@ char		*parse_float(char *str, float *box)
 		res /= 10.0;
 	*box += res;
 	str += i + flag;
+	*box *= sign;
 	while (*str && (*str == ' ' || *str == '\t' || *str == '\r'))
 		str++;
 	return (str);

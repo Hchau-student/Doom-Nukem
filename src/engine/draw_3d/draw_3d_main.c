@@ -42,7 +42,7 @@ void	draw_sector_3d(t_sector *sector, uint32_t walls_count, t_data *data)
 	wall = sector->render->walls;
 	while (i < walls_count)
 	{
-		if (wall->type == WALL)
+		if (wall->type == WALL || wall->type == PORTAL)
 			draw_wall_3d(wall, data);
 		if (wall->type == PORTAL || wall->type == WINDOW)
 		{
@@ -69,17 +69,17 @@ void	clear_bitmap(t_texture *texture)
 
 void	draw_3d(t_data *data)
 {
-	uint32_t		i;
+	int		i;
 
-	i = 0;
+	i = data->engine->sectors_count - 1;
 	clear_bitmap(data->sdl->layers->draw_3d);
 	check_player_place(data);
-//	while (i < data->engine->sectors_count)
-//	{
-//		draw_sector_3d(&data->engine->sectors[i],
-//					   data->engine->sectors[i].render->walls_count, data);
-//		i++;
-//	}
-	draw_sector_3d(data->engine->player->current_sector,
-		data->engine->player->current_sector->render->walls_count, data);
+	while (i >= 0)
+	{
+		draw_sector_3d(&data->engine->sectors[i],
+					   data->engine->sectors[i].render->walls_count, data);
+		i--;
+	}
+//	draw_sector_3d(data->engine->player->current_sector,
+//		data->engine->player->current_sector->render->walls_count, data);
 }
