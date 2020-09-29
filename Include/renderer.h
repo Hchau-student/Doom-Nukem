@@ -7,6 +7,20 @@
 
 #include "map_struct.h"
 
+#define ZERO_FLOOR	(float)SCREEN_HEIGHT / 1.2
+/*
+**		wall destination
+*/
+
+
+/*
+**		draw 3d
+*/
+
+t_vec3			horizontal_clipping(t_wall *full_wall,
+									  t_vec3 original_dot, t_data *data);
+void			draw_wall_3d(t_wall *w_origin, t_data *data);
+
 /*
 **		wall preparations
 */

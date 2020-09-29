@@ -3,7 +3,7 @@
 //
 
 #include "../../../Include/doom_nukem.h"
-#include "../../../Include/map_struct.h"
+#include "../../../Include/renderer.h"
 
 /*
 **		wall's x on the screen is calculated by
@@ -65,14 +65,14 @@ void	wall_extremes(t_data *data, t_wall w, t_wall *borders, float *end_x)
 	left_h = wall_h(w.left, w.height, data->engine->player);
 	*end_x = right;
 	borders->left.x = left;
-	borders->left.y = (float)SCREEN_HEIGHT / 1.2 + (float)w.sector->render->floor_height - left_h * 2;
-	borders->right.y = (float)SCREEN_HEIGHT / 1.2 + (float)w.sector->render->floor_height/*TODO find indent*/;
+	borders->left.y = ZERO_FLOOR - (left_h * (1.0 - (float)w.sector->render->floor_height / 100.0));
+	borders->right.y = ZERO_FLOOR + (left_h * ((float)w.sector->render->floor_height / 100.0));
 	if (borders->left.x > *end_x)
 	{
 		*end_x = left;
 		borders->left.x = right;
-		borders->left.y = (float)SCREEN_HEIGHT / 1.2 + (float)w.sector->render->floor_height - right_h * 2;
-		borders->right.y = (float)SCREEN_HEIGHT / 1.2 + (float)w.sector->render->floor_height/*TODO find indent*/;
+		borders->left.y = ZERO_FLOOR - (right_h * (1.0 - (float)w.sector->render->floor_height / 100.0));
+		borders->right.y = ZERO_FLOOR + (right_h * ((float)w.sector->render->floor_height / 100.0));
 	}
 }
 

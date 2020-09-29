@@ -47,8 +47,8 @@ sector
 {
     type                normal
     light               0x99999999
-    floor   -10.0          Eda
-    ceiling 40.0        Dicksy
+    floor   30.0          Eda
+    ceiling 90.0        Dicksy
     walls
     {
         wall_0  x1 500.0    y1 350.0    x2 550.0    y2 420.0    type    normal
@@ -106,16 +106,16 @@ sector
     type                normal
     light               0x99999999
     floor 0.0           Eda
-    ceiling 600.0       Dicksy
+    ceiling 2000.0       Dicksy
     walls
     {
-        wall_0  x1 1.0      y1 1.0      x2 1.0      y2 500.0    type    normal
+        wall_0  x1 1.0      y1 1.0      x2 1.0      y2 1500.0    type    normal
         textures bedy_c_mamami
-        wall_3  x1 1.0      y1 500.0    x2 600.0    y2 500.0    type    normal
+        wall_3  x1 1.0      y1 1500.0    x2 1600.0    y2 1500.0    type    normal
         textures bedy_c_mamami
-        wall_1  x1 600.0    y1 500.0    x2 600.0    y2 1.0      type    normal
+        wall_1  x1 1600.0    y1 1500.0    x2 1600.0    y2 1.0      type    normal
         textures bedy_c_mamami
-        wall_2  x1 600.0    y1 1.0      x2 1.0      y2 1.0      type    normal
+        wall_2  x1 1600.0    y1 1.0      x2 1.0      y2 1.0      type    normal
         textures bedy_c_mamami
     }
     t_walls

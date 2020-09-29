@@ -383,14 +383,6 @@ void			draw_minimap_player(t_data *data);
 void			draw_minimap_sectors(t_data *data);
 
 /*
-**		draw 3d
-*/
-
-t_vec3			horizontal_clipping(t_wall *full_wall,
-							t_vec3 original_dot, t_data *data);
-void			draw_wall_3d(t_wall *w_origin, t_data *data);
-
-/*
 **		tools for objects
 */
 

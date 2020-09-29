@@ -22,7 +22,11 @@ void	data_text(t_wall borders, float text_x, t_texture *wall_texture, t_data *da
 	if (y > SCREEN_HEIGHT) {
 		return;
 	}
-
+	if (y < 0)
+	{
+		y1 += y1 * step * y * -1;
+		y = 0;
+	}
 	if (text_x < 0 || text_x > wall_texture->width)
 		return;
 	if (borders.left.x < 0 || borders.left.x > SCREEN_WIDTH)
@@ -73,6 +77,9 @@ void	texturing_algorithm(t_wall w, t_wall *text_extremes, t_data *data, t_wall *
 	wall_extremes(data, w, &borders, &end_x);
 	step.y = (wall_h(w.left, w.height, data->engine->player)
 			  - wall_h(w.right, w.height, data->engine->player)) / (end_x - borders.left.x);
+	/*
+	**	TODO step.y for borders.right.y
+	*/
 	angle = 0;
 	step.x = (1.0) / (end_x - borders.left.x);
 	if (find_angle(data, w.left) > find_angle(data, w.right))
@@ -84,8 +91,8 @@ void	texturing_algorithm(t_wall w, t_wall *text_extremes, t_data *data, t_wall *
 			text_extremes->right, w_origin->textures[WALL_TEXT]->width);
 		data_text(borders, t_start_x, w_origin->textures[WALL_TEXT], data);
 		borders.left.x = (int)borders.left.x + 1;
-		borders.left.y += step.y * 2;
-//		borders.right.y -= step.y;
+		borders.left.y += step.y * (1.0 - (float)w.sector->render->floor_height / 100.0);
+		borders.right.y -= step.y * ((float)w.sector->render->floor_height / 100.0);
 		angle += step.x;
 	}
 }
