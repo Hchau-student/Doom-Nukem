@@ -103,7 +103,7 @@ static void		check_walls_cycle(struct s_sector *sector, struct s_data *data)
 	{
 		i++;
 		wall->next->prev = wall;
-		wall->height = sector->render->ceiling_height - sector->render->floor_height;
+		wall->height = sector->ceiling_height - sector->floor_height;
 		if (!(check_wall_connect(wall,
 					wall->next, wall->prev)) || wall->height <= 0)
 		{

@@ -91,6 +91,8 @@ static void		get_wall_textures(char *str, t_wall *wall, t_data *data, t_parse **
 	if (i == 2 && (wall->type != WINDOW && wall->type != PORTAL))
 		safe_call_parse_int(-1, "Should be 2 textures "
 					"for window and portal kinds of wall.", data, parse);
+	if (wall->type == PORTAL)
+		wall->textures[DOWN_TEXT] = wall->textures[MIDDLE_TEXT];
 }
 
 //void			add_portal(t_parse **parse, t_data *data, t_wall *wall)

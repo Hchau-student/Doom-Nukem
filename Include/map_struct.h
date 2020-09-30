@@ -224,6 +224,8 @@ struct					s_wall
 	t_vec3		right;
 	float		height;
 	float		length;
+	float		floor_height;
+	float		ceiling_height;
 	t_wall		*portal_to;
 	t_sector	*sector;
 	t_texture	*textures[3];

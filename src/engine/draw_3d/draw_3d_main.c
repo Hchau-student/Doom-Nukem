@@ -43,7 +43,7 @@ void	draw_sector_3d(t_sector *sector, uint32_t walls_count, t_data *data)
 	wall = sector->render->walls;
 	while (i < walls_count)
 	{
-		if (wall->type == WALL)
+//		if (wall->type == WALL)
 			draw_wall_3d(wall, data);
 		if (wall->type == PORTAL || wall->type == WINDOW)
 		{

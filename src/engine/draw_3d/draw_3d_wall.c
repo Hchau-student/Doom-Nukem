@@ -80,9 +80,6 @@ void	texturing_algorithm(t_wall w, t_wall *text_extremes, t_data *data, t_wall *
 			  - wall_h(w.right, w.height, data->engine->player)) / (end_x - borders.left.x);
 	borders.left.z = (borders.left.z
 					  - borders.right.z) / (end_x - borders.left.x);
-	/*
-	**	TODO step.y for borders.right.y
-	*/
 	angle = 0;
 	step.x = (1.0) / (end_x - borders.left.x);
 	if (find_angle(data, w.left) > find_angle(data, w.right))
@@ -110,7 +107,25 @@ void	draw_wall_3d(t_wall *w_origin, t_data *data)
 	w.left = horizontal_clipping(w_origin, w_origin->left, data);
 	if (w.left.x < 0 || w.right.x < 0)
 		return ;
+
+	w.height = w.sector->ceiling_height;// - data->engine->player->current_sector->floor_height * 2 - 40;
+//	w.floor_height = w.sector->floor_height;
+//	w.ceiling_height = w.sector->ceiling_height - data->engine->player->current_sector->floor_height - 20.0;
 	text_extremes(w, w_origin, &text_extreme);
 	text_destination(data, w, &text_extreme);
-	texturing_algorithm(w, &text_extreme, data, w_origin);
+	if (w.type == PORTAL)
+	{
+		w.height = w.sector->floor_height;
+		w.floor_height = w.sector->floor_height;
+		w.portal_to->floor_height = w.portal_to->sector->floor_height;
+		w.portal_to->ceiling_height = w.portal_to->sector->ceiling_height;
+		w.floor_height = w.sector->floor_height;
+		portal_texturing(w, &text_extreme, data, w_origin);
+	}
+	else
+	{
+		w.height = w.sector->ceiling_height;// + w.sector->ceiling_height - data->engine->player->current_sector->floor_height * 2 - 40;
+		w.floor_height = w.sector->floor_height;// - data->engine->player->current_sector->floor_height - 20;
+		texturing_algorithm(w, &text_extreme, data, w_origin);
+	}
 }
