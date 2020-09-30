@@ -108,24 +108,26 @@ void	draw_wall_3d(t_wall *w_origin, t_data *data)
 	if (w.left.x < 0 || w.right.x < 0)
 		return ;
 
-	w.height = w.sector->ceiling_height;// - data->engine->player->current_sector->floor_height * 2 - 40;
+	w.height = w.sector->ceiling_height - data->engine->player->current_sector->floor_height * 2 - 40;
+	w.floor_height = w.sector->floor_height - data->engine->player->current_sector->floor_height - 20;
+	w.ceiling_height = w.sector->ceiling_height - data->engine->player->current_sector->floor_height - 20;
 //	w.floor_height = w.sector->floor_height;
 //	w.ceiling_height = w.sector->ceiling_height - data->engine->player->current_sector->floor_height - 20.0;
 	text_extremes(w, w_origin, &text_extreme);
 	text_destination(data, w, &text_extreme);
 	if (w.type == PORTAL)
 	{
-		w.height = w.sector->floor_height;
-		w.floor_height = w.sector->floor_height;
-		w.portal_to->floor_height = w.portal_to->sector->floor_height;
-		w.portal_to->ceiling_height = w.portal_to->sector->ceiling_height;
-		w.floor_height = w.sector->floor_height;
+//		w.height = w.sector->floor_height;
+//		w.floor_height = w.sector->floor_height;
+		w.portal_to->floor_height = w.portal_to->sector->floor_height - data->engine->player->current_sector->floor_height - 20;
+		w.portal_to->ceiling_height = w.portal_to->sector->ceiling_height - data->engine->player->current_sector->floor_height - 20;
+//		w.floor_height = w.sector->floor_height;
 		portal_texturing(w, &text_extreme, data, w_origin);
 	}
 	else
 	{
-		w.height = w.sector->ceiling_height;// + w.sector->ceiling_height - data->engine->player->current_sector->floor_height * 2 - 40;
-		w.floor_height = w.sector->floor_height;// - data->engine->player->current_sector->floor_height - 20;
+//		w.height = w.sector->ceiling_height;// + w.sector->ceiling_height - data->engine->player->current_sector->floor_height * 2 - 40;
+//		w.floor_height = w.sector->floor_height;// - data->engine->player->current_sector->floor_height - 20;
 		texturing_algorithm(w, &text_extreme, data, w_origin);
 	}
 }

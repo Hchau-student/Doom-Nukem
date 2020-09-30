@@ -53,7 +53,8 @@ DRAW_3D_FILES = draw_3d_main.c \
                 draw_3d_wall.c \
                 wall_horizontal_clipping.c \
                 draw_3d_walls_preparations.c \
-                draw_portal.c
+                draw_portal.c \
+                sort_walls.c
 
 MENU_FILES = menu.c \
              load_game.c \
