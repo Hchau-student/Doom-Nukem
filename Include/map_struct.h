@@ -326,6 +326,7 @@ typedef struct			s_engine
 	t_list			*enemies;
 	t_list			*shoots;
 	t_minimap		*minimap;
+	uint8_t			quality;
 }						t_engine;
 
 /*

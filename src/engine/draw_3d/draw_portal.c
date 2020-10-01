@@ -97,8 +97,8 @@ void	portal_texturing(t_wall w, t_wall *text_extremes, t_data *data, t_wall *w_o
 	t_draw_wall		up_part;
 	float			angle;
 
-	prepare_portal(w.sector->floor_height, w.portal_to->floor_height/* - data->engine->player->current_sector->floor_height - 20*/, &w, &down_part, data);
-	prepare_portal(w.sector->ceiling_height, w.portal_to->ceiling_height/* - data->engine->player->current_sector->floor_height - 20*/, &w, &up_part, data);
+	prepare_portal(w.floor_height, w.portal_to->floor_height/* - data->engine->player->current_sector->floor_height - 20*/, &w, &down_part, data);
+	prepare_portal(w.ceiling_height, w.portal_to->ceiling_height/* - data->engine->player->current_sector->floor_height - 20*/, &w, &up_part, data);
 	prepare_all_portal_data(data, &down_part, &angle);
 	prepare_all_portal_data(data, &up_part, &angle);
 	while (up_part.current_x < up_part.end_x)

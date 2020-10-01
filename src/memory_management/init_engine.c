@@ -89,6 +89,7 @@ void	init_engine(t_data *data)
 	engine = data->engine;
 	engine->sdl = data->sdl;
 	engine->textures = data->textures;
+	engine->quality = 2;
 //	engine->minimap = (t_texture *)safe_call_ptr(ft_memalloc(sizeof(t_texture)),
 //						"Malloc crashed: engine init", data);
 	init_minimap(data);

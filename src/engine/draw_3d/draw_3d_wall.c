@@ -14,6 +14,7 @@ void	data_text(t_wall borders, float text_x, t_texture *wall_texture, t_data *da
 	float step = (float)wall_texture->height / (fabs((borders.right.y) - (borders.left.y)));
 	float y = borders.left.y;
 	float y1 = 0.0;
+	uint8_t		quality;
 
 	if (y < 0.0) {
 		y1 = -y * step;
@@ -37,12 +38,22 @@ void	data_text(t_wall borders, float text_x, t_texture *wall_texture, t_data *da
 		if (y >= SCREEN_HEIGHT)
 			return;
 		if (borders.left.x >= 0 && y >= 0 &&
-			borders.left.x < SCREEN_WIDTH && y < SCREEN_HEIGHT) {
-			data->sdl->layers->draw_3d->bit_map[(int)((int)borders.left.x + (int)y * SCREEN_WIDTH)] =
-					wall_texture->bit_map[(int)((int)y1 * wall_texture->width + text_x)];
-		}
+			borders.left.x < SCREEN_WIDTH && y < SCREEN_HEIGHT)
+//		{
+//			quality = 0;
+//			while (quality < data->engine->quality)
+//			{
+//				if (borders.left.x + quality >= 0 && y >= 0 &&
+//					borders.left.x + quality < SCREEN_WIDTH && y + quality < SCREEN_HEIGHT)
+				data->sdl->layers->draw_3d->bit_map[(int)((int)borders.left.x + (int)y * SCREEN_WIDTH)] =
+						wall_texture->bit_map[(int)((int)y1 * wall_texture->width + text_x)];
+//				quality++;
+//			}
+//		}
 		y += 1;
+//		y += quality;
 		y1 += step;
+//		y1 += step * quality;
 	}
 }
 
@@ -107,27 +118,19 @@ void	draw_wall_3d(t_wall *w_origin, t_data *data)
 	w.left = horizontal_clipping(w_origin, w_origin->left, data);
 	if (w.left.x < 0 || w.right.x < 0)
 		return ;
-
 	w.height = w.sector->ceiling_height - data->engine->player->current_sector->floor_height * 2 - 40;
 	w.floor_height = w.sector->floor_height - data->engine->player->current_sector->floor_height - 20;
 	w.ceiling_height = w.sector->ceiling_height - data->engine->player->current_sector->floor_height - 20;
-//	w.floor_height = w.sector->floor_height;
-//	w.ceiling_height = w.sector->ceiling_height - data->engine->player->current_sector->floor_height - 20.0;
 	text_extremes(w, w_origin, &text_extreme);
 	text_destination(data, w, &text_extreme);
 	if (w.type == PORTAL)
 	{
-//		w.height = w.sector->floor_height;
-//		w.floor_height = w.sector->floor_height;
+		w.height = w.sector->ceiling_height;
+		w.ceiling_height -= w.sector->floor_height;
 		w.portal_to->floor_height = w.portal_to->sector->floor_height - data->engine->player->current_sector->floor_height - 20;
-		w.portal_to->ceiling_height = w.portal_to->sector->ceiling_height - data->engine->player->current_sector->floor_height - 20;
-//		w.floor_height = w.sector->floor_height;
+		w.portal_to->ceiling_height = w.portal_to->sector->ceiling_height - w.portal_to->sector->floor_height - data->engine->player->current_sector->floor_height - 20;
 		portal_texturing(w, &text_extreme, data, w_origin);
 	}
 	else
-	{
-//		w.height = w.sector->ceiling_height;// + w.sector->ceiling_height - data->engine->player->current_sector->floor_height * 2 - 40;
-//		w.floor_height = w.sector->floor_height;// - data->engine->player->current_sector->floor_height - 20;
 		texturing_algorithm(w, &text_extreme, data, w_origin);
-	}
 }

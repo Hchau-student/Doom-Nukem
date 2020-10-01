@@ -81,6 +81,6 @@ void	draw_3d(t_data *data)
 					   data->engine->sectors[i].render->walls_count, data);
 		i--;
 	}
-//	draw_sector_3d(data->engine->player->current_sector,
-//		data->engine->player->current_sector->render->walls_count, data);
+	draw_sector_3d(data->engine->player->current_sector,
+		data->engine->player->current_sector->render->walls_count, data);
 }
