@@ -15,7 +15,7 @@ void	main_loop(t_data *data)
 		data->go_to->condition(data);
 		while (SDL_PollEvent(&event))
 		{
-//			mouse_events(event, draw, &is_pressed);
+			data->go_to->mouse_event(&event, data);
 //			SDL_PumpEvents(); // обработчик событий.
 			if(event.type == SDL_QUIT)
 				quit=1;

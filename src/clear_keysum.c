@@ -11,9 +11,5 @@ void	clear_keysum(t_data *data)
 	uint32_t	i;
 
 	i = 0;
-	while (i < MAX_KEYCODE)
-	{
-		data->sdl->key_pressed[i] = FALSE;
-		i++;
-	}
+	ft_memset(data->sdl->key_pressed, FALSE, sizeof(int) * MAX_KEYCODE);
 }

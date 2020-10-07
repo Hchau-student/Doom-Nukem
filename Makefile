@@ -26,6 +26,8 @@ PARSE_DIR = ./src/parse
 MENU_DIR = ./src/menu
 MEMORY_DIR = ./src/memory_management
 DRAW_3D_DIR = ./src/engine/draw_3d
+LEV_EDITOR_DIR = ./src/level_editor
+
 # SRC_3D_DIR = ./s
 
 OBJ_DIR = ./obj
@@ -37,7 +39,8 @@ C_FILES = main.c \
 		  main_loop.c \
 		  scale_image.c \
 		  update_texture.c \
-		  clear_keysum.c
+		  clear_keysum.c \
+		  remove_alpha.c
 
 ENGINE_FILES = start_the_game.c \
                key_event.c \
@@ -47,7 +50,10 @@ ENGINE_FILES = start_the_game.c \
                draw_minimap.c \
                draw_minimap_tools.c \
                drawing_line.c \
-               is_inside.c
+               is_inside.c \
+               condition.c
+
+LEV_EDITOR_FILES = level_editor.c
 
 DRAW_3D_FILES = draw_3d_main.c \
                 draw_3d_wall.c \
@@ -59,7 +65,8 @@ DRAW_3D_FILES = draw_3d_main.c \
 MENU_FILES = menu.c \
              load_game.c \
              key_event.c \
-             mouse_event.c
+             mouse_event.c \
+             condition.c
 
 PARSE_FILES = parse.c \
               parse_wall.c \
@@ -91,6 +98,7 @@ MEMORY_FILES = init_player.c \
 
 OBJ_FILES = $(C_FILES:.c=.o)
 # OBJ_FILES_3D = $(C_FILES_3D:.c=.o)
+OBJ_LEV_EDITOR = $(LEV_EDITOR_FILES:.c=.o)
 OBJ_FILES_ENGINE = $(ENGINE_FILES:.c=.o)
 OBJ_FILES_PARSE = $(PARSE_FILES:.c=.o)
 OBJ_FILES_MENU = $(MENU_FILES:.c=.o)
@@ -104,6 +112,7 @@ RAW_OBJ_FILES_PARSE = $(addprefix $(OBJ_DIR)/4_,$(OBJ_FILES_PARSE))
 RAW_OBJ_FILES_MENU = $(addprefix $(OBJ_DIR)/5_,$(OBJ_FILES_MENU))
 RAW_OBJ_FILES_MEMORY = $(addprefix $(OBJ_DIR)/6_,$(OBJ_FILES_MEMORY))
 RAW_OBJ_FILES_DRAW_3D = $(addprefix $(OBJ_DIR)/7_,$(OBJ_DRAW_3D))
+RAW_OBJ_LEV_EDITOR = $(addprefix $(OBJ_DIR)/8_,$(OBJ_LEV_EDITOR))
 
 DEPS = $(RAW_OBJ_FILES:.o=.d)
 # DEPS_PARSING = $(RAW_OBJ_FILES_3D:.o=.d)
@@ -160,10 +169,11 @@ $(OBJ_DIR):
 
 $(NAME): ./libft/libft.a $(SDL_DIST) $(RAW_OBJ_FILES) \
 	$(RAW_OBJ_FILES_ENGINE) $(RAW_OBJ_FILES_PARSE) $(RAW_OBJ_FILES_MENU) \
-	$(RAW_OBJ_FILES_MEMORY) $(RAW_OBJ_FILES_DRAW_3D)
+	$(RAW_OBJ_FILES_MEMORY) $(RAW_OBJ_FILES_DRAW_3D) $(RAW_OBJ_LEV_EDITOR)
 	gcc -o $(NAME) $(RAW_OBJ_FILES) $(RAW_OBJ_FILES_MEMORY) \
 	$(RAW_OBJ_FILES_ENGINE) $(RAW_OBJ_FILES_PARSE) \
-	$(RAW_OBJ_FILES_MENU) $(RAW_OBJ_FILES_DRAW_3D) $(LDFLAGS)
+	$(RAW_OBJ_FILES_MENU) $(RAW_OBJ_FILES_DRAW_3D) \
+	$(RAW_OBJ_LEV_EDITOR) $(LDFLAGS)
 	@echo "$(PINK)(*≧ω≦*)  $(BLUE)Mama, ya sobralsya  $(PINK)(*≧ω≦*)"
 # 	@sh /Users/hchau/Desktop/hohow/priv.sh
 
@@ -204,6 +214,10 @@ $(OBJ_DIR)/6_%.o: $(MEMORY_DIR)/%.c | $(OBJ_DIR)
 
 -include $(DEPS)
 $(OBJ_DIR)/7_%.o: $(DRAW_3D_DIR)/%.c | $(OBJ_DIR)
+	gcc $(CFLAGS_FINAL) -c $< -o $@
+
+-include $(DEPS)
+$(OBJ_DIR)/8_%.o: $(LEV_EDITOR_DIR)/%.c | $(OBJ_DIR)
 	gcc $(CFLAGS_FINAL) -c $< -o $@
 
 clean: clean_libs clean_SDL clean_self

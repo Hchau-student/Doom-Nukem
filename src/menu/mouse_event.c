@@ -4,7 +4,7 @@
 #include "../../Include/doom_nukem.h"
 #include "../../Include/map_struct.h"
 
-void	menu_mouse_event()
+void	menu_mouse_event(SDL_Event *event, t_data *data)
 {
 
 }

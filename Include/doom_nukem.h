@@ -55,8 +55,19 @@ typedef enum	e_screen_status
 	LEVEL_LODE,
 	GAME,
 	PAUSE_MENU,
-	PREFERENCES
+	PREFERENCES,
+	BUTTONS_COUNT
 }				t_screen_status;
+
+typedef enum	e_button_name
+{
+	B_NEW_GAME,
+	B_CHOSE_LEVEL,
+	B_LEVEL_EDITOR,
+	B_PREFERENCES,
+	B_EXIT,
+	B_COUNT
+}				t_button_name;
 
 //// TODO разобраться со шрифтами в SDL
 //
@@ -89,25 +100,30 @@ typedef struct		s_button
 	int 			y;
 	int 			width;
 	int 			height;
-	t_bool			brightness;
+	int8_t			brightness;
+	t_texture		*texture;
 	uint32_t		*bit_map;
 }					t_button;
 
 typedef struct		s_menu
 {
-
+	t_button		buttons[B_COUNT];
+	t_texture		*background;
+	int8_t			pressed_button;
 }					t_menu;
 
 typedef struct		s_mouse
 {
 	int				x;
 	int				y;
-	t_bool			is_pressed;
+	int8_t			is_pressed;
+	int8_t			is_moved;
 }					t_mouse;
 
 typedef struct		s_layers
 {
 	t_texture		*minimap;
+	t_texture		*menu;
 	t_texture		*hud;
 	t_texture		*draw_3d;
 }					t_layers;
@@ -125,6 +141,7 @@ typedef struct		s_sdl
 	int				indian;
 	uint32_t		*color_buffer;
 	int				key_pressed[MAX_KEYCODE];
+	t_mouse			mouse;
 }					t_sdl;
 
 /*
@@ -139,7 +156,7 @@ typedef struct		s_main_actions
 {
 	void		(*condition)(struct s_data *draw);
 	void		(*key_event)(SDL_Event *event, t_data *data);
-	void		(*mouse_event)();
+	void		(*mouse_event)(SDL_Event *event, t_data *data);
 }					t_main_actions;
 
 /*
@@ -149,6 +166,7 @@ typedef struct		s_main_actions
 struct			s_data
 {
 	t_sdl			*sdl;
+	t_menu			menu;
 	t_texture		**textures;
 	struct s_engine	*engine;
 	t_main_actions	*go_to;
@@ -188,9 +206,10 @@ void			*safe_call_ptr(void *res, char *message, t_data *data);
 
 void			menu(t_data *data);
 void			load_game(t_data *data);
+void			level_editor(t_data *data);
 void			menu_key_event(SDL_Event *event, t_data *data);
-void			menu_mouse_event();
-
+void			menu_mouse_event(SDL_Event *event, t_data *data);
+void			menu_condition(t_data *data);
 /*
 **		main loop
 */
@@ -215,6 +234,7 @@ void			update_texture(t_data *data);
 void			put_layer(SDL_Texture *texture, uint32_t *bitmap,
 								uint32_t width, t_data *data);
 void			draw_3d(t_data *data);
+void			remove_alpha(t_texture *texture);
 
 /*
 **		clear keysum

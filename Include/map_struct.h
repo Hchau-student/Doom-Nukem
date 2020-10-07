@@ -367,7 +367,8 @@ void			remove_engine(t_data *data);
 */
 
 void			engine_key_event(SDL_Event *event, t_data *data);
-void			engine_mouse_event();
+void			engine_mouse_event(SDL_Event *event, t_data *data);
+void			game_condition(t_data *data);
 
 /*
 **		simple drawings

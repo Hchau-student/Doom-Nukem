@@ -9,11 +9,11 @@
 #define ABSOLUTE_PATH_TEXTURES	"/Users/hchau/Downloads/" \
 		"Doom-Nukem-structure/extra_src/parse_textures.txt"
 
-
-void			menu_condition(t_data *data)
-{
-	update_texture(data);
-}
+//
+//void			menu_condition(t_data *data)
+//{
+//	update_texture(data);
+//}
 
 void			init_main_actions(t_data *data)
 {

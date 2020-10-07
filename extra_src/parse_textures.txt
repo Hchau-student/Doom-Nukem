@@ -40,4 +40,9 @@
 ./extra_src/minimap.bmp
 ./extra_src/player_icon.bmp
 ./extra_src/sky.bmp
-./extra_src/ground.bmp
+./extra_src/menu/chose_level.bmp
+./extra_src/menu/exit.bmp
+./extra_src/menu/game_preferences.bmp
+./extra_src/menu/level_editor.bmp
+./extra_src/menu/start_new_game.bmp
+./extra_src/menu/menu_background.bmp
