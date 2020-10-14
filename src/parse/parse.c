@@ -11,7 +11,11 @@ int				open_file(char *map_name, t_data *data)
 {
 	int fd = open(map_name, O_RDONLY);
 	if (fd < 3)
+	{
+		ft_putstr(map_name);
+		ft_putendl(":");
 		safe_call_int(-1, "Can't open file, try again.", data);
+	}
 	return (fd);
 }
 

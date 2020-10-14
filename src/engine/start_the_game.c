@@ -11,7 +11,7 @@
 void			start_the_game(t_data *data)
 {
 	clear_keysum(data);
-	data->go_to->mouse_event = &engine_mouse_event;
-	data->go_to->key_event = &engine_key_event;
+	data->engine->minimap->size_divider = 3.2;
+	data->engine->minimap->background = find_texture_by_name("minimap", data);
 	data->go_to->condition = &game_condition;
 }

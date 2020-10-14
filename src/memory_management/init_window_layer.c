@@ -27,6 +27,7 @@ void		init_sdl_layers(t_data *data)
 	init_single_layer(&data->sdl->layers->hud, data);
 	init_single_layer(&data->sdl->layers->draw_3d, data);
 	init_single_layer(&data->sdl->layers->menu, data);
+	init_single_layer(&data->sdl->layers->level_editor, data);
 }
 
 void		remove_layers(t_layers **layers)

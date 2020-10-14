@@ -40,11 +40,12 @@ C_FILES = main.c \
 		  scale_image.c \
 		  update_texture.c \
 		  clear_keysum.c \
-		  remove_alpha.c
+		  remove_alpha.c \
+		  key_event.c \
+		  mouse_event.c \
+		  buttons_work.c
 
 ENGINE_FILES = start_the_game.c \
-               key_event.c \
-               mouse_event.c \
                draw_hud.c \
                tools_weapon.c \
                draw_minimap.c \
@@ -53,7 +54,11 @@ ENGINE_FILES = start_the_game.c \
                is_inside.c \
                condition.c
 
-LEV_EDITOR_FILES = level_editor.c
+LEV_EDITOR_FILES = level_editor.c \
+                   init_default_map.c \
+                   condition.c \
+                   draw_walls.c \
+                   init_level_editor.c
 
 DRAW_3D_FILES = draw_3d_main.c \
                 draw_3d_wall.c \
@@ -64,8 +69,6 @@ DRAW_3D_FILES = draw_3d_main.c \
 
 MENU_FILES = menu.c \
              load_game.c \
-             key_event.c \
-             mouse_event.c \
              condition.c
 
 PARSE_FILES = parse.c \

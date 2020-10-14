@@ -1,10 +1,11 @@
 //
-// Created by Hugor Chau on 9/16/20.
+// Created by Hugor Chau on 10/8/20.
 //
-#include "../../Include/doom_nukem.h"
-#include "../../Include/map_struct.h"
 
-void	engine_mouse_event(SDL_Event *event, t_data *data)
+#include "../Include/doom_nukem.h"
+#include "../Include/map_struct.h"
+
+void	mouse_event(SDL_Event *event, t_data *data)
 {
 	if (event->type == SDL_MOUSEMOTION)
 	{
@@ -20,11 +21,4 @@ void	engine_mouse_event(SDL_Event *event, t_data *data)
 			data->sdl->mouse.is_pressed = TRUE;
 		}
 	}
-//	if(event->type == SDL_MOUSEBUTTONDOWN)
-//	{
-//		if (event->button.button == SDL_BUTTON_LEFT)
-//		{
-//			data->sdl->mouse.is_pressed = TRUE;
-//		}
-//	}
 }

@@ -23,11 +23,38 @@
 
 struct			s_vec2;
 typedef struct	s_data	t_data;
+struct			s_level_editor;
 struct			s_engine;
 struct			s_wall;
-struct			s_square;
 #define MINIMAP_H	200
 #define MINIMAP_W	200
+#define DEFAULT_MAP		"1_0"
+#define DEFAULT_PATH	"/Users/hchau/Downloads/Doom-Nukem-structure/parse_maps/"
+
+typedef struct			s_vec2
+{
+	float				x;
+	float				y;
+}						t_vec2;
+
+typedef struct			s_ivec2
+{
+	int					x;
+	int					y;
+}						t_ivec2;
+
+typedef struct			s_vec3
+{
+	float	x;
+	float	y;
+	float	z;
+}						t_vec3;
+
+typedef struct			s_square
+{
+	t_vec2		start;
+	t_vec2		end;
+}						t_square;
 
 typedef enum		e_keycode
 {
@@ -69,7 +96,10 @@ typedef enum	e_button_name
 	B_COUNT
 }				t_button_name;
 
-//// TODO разобраться со шрифтами в SDL
+#define MENU_BUTTONS_NAMES	{"start_new_game", "chose_level", "level_editor", \
+							"game_preferences", "exit"}
+
+// TODO разобраться со шрифтами в SDL
 //
 //typedef struct		s_line
 //{
@@ -100,6 +130,7 @@ typedef struct		s_button
 	int 			y;
 	int 			width;
 	int 			height;
+	t_square		borders;
 	int8_t			brightness;
 	t_texture		*texture;
 	uint32_t		*bit_map;
@@ -110,6 +141,7 @@ typedef struct		s_menu
 	t_button		buttons[B_COUNT];
 	t_texture		*background;
 	int8_t			pressed_button;
+	char			*cur_map_name;
 }					t_menu;
 
 typedef struct		s_mouse
@@ -126,6 +158,7 @@ typedef struct		s_layers
 	t_texture		*menu;
 	t_texture		*hud;
 	t_texture		*draw_3d;
+	t_texture		*level_editor;
 }					t_layers;
 
 typedef struct		s_sdl
@@ -134,7 +167,6 @@ typedef struct		s_sdl
 	SDL_Renderer	*rend;
 	SDL_Rect		*rect;
 	t_layers		*layers;
-//	t_texture		*doom_texture;
 	SDL_Texture		*target_texture;
 	SDL_Surface		*surf;
 	SDL_Texture		*tex;
@@ -155,8 +187,6 @@ typedef struct		s_sdl
 typedef struct		s_main_actions
 {
 	void		(*condition)(struct s_data *draw);
-	void		(*key_event)(SDL_Event *event, t_data *data);
-	void		(*mouse_event)(SDL_Event *event, t_data *data);
 }					t_main_actions;
 
 /*
@@ -165,10 +195,11 @@ typedef struct		s_main_actions
 
 struct			s_data
 {
-	t_sdl			*sdl;
-	t_menu			menu;
-	t_texture		**textures;
-	struct s_engine	*engine;
+	t_sdl					*sdl;
+	t_menu					menu;
+	t_texture				**textures;
+	struct s_engine			*engine;
+	struct s_level_editor	*level_editor;
 	t_main_actions	*go_to;
 };
 
@@ -179,6 +210,7 @@ struct			s_data
 void			init_data(t_data *data);
 void			init_sdl(t_data *data, char *name);
 void			init_sdl_layers(t_data *data);
+void			init_menu(t_data *data);
 t_texture		**init_textures(char *path, t_data *data);
 t_texture		*init_single_texture(char *name, t_data *data);
 int				open_file(char *map_name, t_data *data);
@@ -207,14 +239,15 @@ void			*safe_call_ptr(void *res, char *message, t_data *data);
 void			menu(t_data *data);
 void			load_game(t_data *data);
 void			level_editor(t_data *data);
-void			menu_key_event(SDL_Event *event, t_data *data);
-void			menu_mouse_event(SDL_Event *event, t_data *data);
 void			menu_condition(t_data *data);
+
 /*
 **		main loop
 */
 
 void			main_loop(t_data *data);
+void			mouse_event(SDL_Event *event, t_data *data);
+void			key_event(SDL_Event *event, t_data *data);
 
 /*
 **		етих функций пока нет
@@ -241,5 +274,15 @@ void			remove_alpha(t_texture *texture);
 */
 
 void	clear_keysum(t_data *data);
+
+/*
+**		buttons_work.c
+*/
+
+void			buttons_move_mouse(t_button *buttons,
+						int8_t max_size, t_mouse *mouse, int8_t *change);
+void			change_button_brightness(t_button *button);
+void			prepare_all_buttons(t_button *buttons, int32_t count);
+//void			init_buttons(t_data *data, t_button *buttons, int8_t count, char **name);
 
 #endif

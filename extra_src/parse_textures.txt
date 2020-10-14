@@ -46,3 +46,8 @@
 ./extra_src/menu/level_editor.bmp
 ./extra_src/menu/start_new_game.bmp
 ./extra_src/menu/menu_background.bmp
+./extra_src/level_editor/del_obj.bmp
+./extra_src/level_editor/draw_obj.bmp
+./extra_src/level_editor/move_obj.bmp
+./extra_src/level_editor/save.bmp
+./extra_src/level_editor/le_exit.bmp

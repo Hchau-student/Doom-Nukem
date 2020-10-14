@@ -10,6 +10,8 @@ static void		draw_wall_minimap(t_wall *wall, t_data *data)
 	t_line		line;
 	t_minimap	*minimap;
 
+	if (wall == NULL)
+		return;
 	minimap = data->engine->minimap;
 	line.start.x = (wall->left.x - minimap->start_from.x) / minimap->size_divider;
 	line.start.y = (wall->left.y - minimap->start_from.y) / minimap->size_divider;

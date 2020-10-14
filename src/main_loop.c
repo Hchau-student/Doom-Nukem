@@ -15,7 +15,7 @@ void	main_loop(t_data *data)
 		data->go_to->condition(data);
 		while (SDL_PollEvent(&event))
 		{
-			data->go_to->mouse_event(&event, data);
+			mouse_event(&event, data);
 //			SDL_PumpEvents(); // обработчик событий.
 			if(event.type == SDL_QUIT)
 				quit=1;
@@ -25,12 +25,12 @@ void	main_loop(t_data *data)
 			if (event.type == SDL_KEYDOWN) {
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					quit = 1;
-				data->go_to->key_event(&event, data);
+				key_event(&event, data);
 			}
 			if (event.type == SDL_KEYUP) {
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					quit = 1;
-				data->go_to->key_event(&event, data);
+				key_event(&event, data);
 			}
 		}
 	}

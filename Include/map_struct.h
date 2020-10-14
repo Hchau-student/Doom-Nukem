@@ -134,25 +134,6 @@ typedef enum			e_player_state
 	PLAYER_KILL = 4,
 }						t_player_state;
 
-typedef struct			s_vec2
-{
-	float				x;
-	float				y;
-}						t_vec2;
-
-typedef struct			s_ivec2
-{
-	int					x;
-	int					y;
-}						t_ivec2;
-
-typedef struct			s_vec3
-{
-	float	x;
-	float	y;
-	float	z;
-}						t_vec3;
-
 /*
 **		every part of render reminds a square,
 **		so it could be useful to have such a
@@ -168,12 +149,6 @@ typedef struct			s_polygon
 	t_vec2		right_bottom;
 	t_vec2		right_top;
 }						t_polygon;
-
-typedef struct			s_square
-{
-	t_vec2		start;
-	t_vec2		end;
-}						t_square;
 
 typedef struct			s_line
 {
@@ -293,6 +268,7 @@ typedef struct			s_sector_render
 struct					s_sector
 {
 	int				id;
+	int8_t			is_ended;
 	t_texture		*textures[2];
 	t_list			*neighbors;
 	t_sector_render	*render;
@@ -366,8 +342,6 @@ void			remove_engine(t_data *data);
 **		3d walls
 */
 
-void			engine_key_event(SDL_Event *event, t_data *data);
-void			engine_mouse_event(SDL_Event *event, t_data *data);
 void			game_condition(t_data *data);
 
 /*

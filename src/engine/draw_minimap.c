@@ -27,13 +27,14 @@ void	rescale_minimap(t_minimap *minimap, t_data *data)
 {
 	minimap->start_from.x = data->engine->player->position.x - SCREEN_WIDTH / 2;
 	minimap->start_from.y = data->engine->player->position.y - SCREEN_HEIGHT / 2;
-	minimap->size_divider = 3.2;
 }
 
 void	draw_minimap(t_data *data)
 {
 	t_minimap	*minimap;
 
+	if (!data->engine || !data->engine->minimap)
+		return;
 	minimap = data->engine->minimap;
 	rescale_minimap(minimap, data);
 	draw_minimap_background(minimap);

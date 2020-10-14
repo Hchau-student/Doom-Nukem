@@ -24,6 +24,7 @@ static void		alloc_sectors(uint32_t cur_sec, t_data *data, t_engine *engine)
 		(t_sector_render *)safe_call_ptr(ft_memalloc(sizeof(t_sector_render)),
 		"Lol malloc crashed in \'./src/parse/parse_sector_line.c\'.", data);
 	engine->sectors[cur_sec].id = cur_sec;
+	engine->sectors[cur_sec].is_ended = TRUE;
 }
 
 void			parse_sector(t_parse **parse, t_data *data)
