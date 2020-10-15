@@ -57,7 +57,7 @@ ENGINE_FILES = start_the_game.c \
 LEV_EDITOR_FILES = level_editor.c \
                    init_default_map.c \
                    condition.c \
-                   draw_walls.c \
+                   draw_wall1.c \
                    init_level_editor.c
 
 DRAW_3D_FILES = draw_3d_main.c \

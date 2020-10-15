@@ -23,6 +23,24 @@ void	delete_extra_lines(t_minimap *minimap)
 	}
 }
 
+static void		clear_minimap(t_minimap *minimap)
+{
+	uint32_t	i;
+	uint32_t	j;
+
+	i = 0;
+	while (i < minimap->texture->width)
+	{
+		j = 0;
+		while (j < minimap->texture->height)
+		{
+			minimap->texture->bit_map[i + j * minimap->texture->width] = 0x00000000;
+			j++;
+		}
+		i++;
+	}
+}
+
 void	rescale_minimap(t_minimap *minimap, t_data *data)
 {
 	minimap->start_from.x = data->engine->player->position.x - SCREEN_WIDTH / 2;
@@ -36,6 +54,7 @@ void	draw_minimap(t_data *data)
 	if (!data->engine || !data->engine->minimap)
 		return;
 	minimap = data->engine->minimap;
+	clear_minimap(minimap);
 	rescale_minimap(minimap, data);
 	draw_minimap_background(minimap);
 	draw_minimap_sectors(data);

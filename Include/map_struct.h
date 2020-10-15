@@ -256,7 +256,6 @@ typedef struct			s_player
 
 typedef struct			s_sector_render
 {
-//	t_twlist	*walls;
 	t_wall		*walls;
 	int32_t		walls_count;
 	float		floor_height;

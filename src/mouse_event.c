@@ -13,12 +13,19 @@ void	mouse_event(SDL_Event *event, t_data *data)
 	}
 	data->sdl->mouse.x = event->motion.x;
 	data->sdl->mouse.y = event->motion.y;
-	data->sdl->mouse.is_pressed = FALSE;
+//	data->sdl->mouse.is_pressed = FALSE;
 	if(event->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (event->button.button == SDL_BUTTON_LEFT)
 		{
 			data->sdl->mouse.is_pressed = TRUE;
+		}
+	}
+	if (event->type == SDL_MOUSEBUTTONUP)
+	{
+		if (event->button.button == SDL_BUTTON_LEFT)
+		{
+			data->sdl->mouse.is_pressed = FALSE;
 		}
 	}
 }
