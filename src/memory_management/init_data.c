@@ -22,13 +22,13 @@ void			init_main_actions(t_data *data)
 void			init_data(t_data *data)
 {
 	ft_bzero(data, sizeof(t_data));
-	data->engine = NULL;
 	data->sdl = (t_sdl *)safe_call_ptr(ft_memalloc(sizeof(t_sdl)),
 			"Malloc crashed in function: init_data", data);
 	init_sdl(data, WIN_TITLE);
 	data->textures = init_textures(ABSOLUTE_PATH_TEXTURES, data);
 	init_menu(data);
 	init_main_actions(data);
+	init_engine(data);
 }
 
 void			remove_data(t_data *data)

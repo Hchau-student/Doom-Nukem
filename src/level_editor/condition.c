@@ -14,8 +14,6 @@ static void		chose_layers(t_data *data, t_level_editor *l)
 			  l->background->bit_map,
 			  l->background->width,
 			  data);
-	if (l->curr_action)
-		l->curr_action(data);
 	while (i < BL_CONTRL_MAX)
 	{
 		change_button_brightness(&l->control_buttons->buttons[i]);
@@ -25,6 +23,8 @@ static void		chose_layers(t_data *data, t_level_editor *l)
 		i++;
 	}
 	draw_minimap(data);
+	if (l->curr_action)
+		l->curr_action(data);
 	put_layer(data->sdl->tex,
 		  data->sdl->layers->minimap->bit_map,
 		  data->sdl->layers->minimap->width,
@@ -33,6 +33,7 @@ static void		chose_layers(t_data *data, t_level_editor *l)
 			  data->sdl->layers->level_editor->bit_map,
 			  data->sdl->layers->level_editor->width,
 			  data);
+
 }
 
 static void		chose_button(t_control_buttons *buttons)
@@ -101,7 +102,7 @@ void		level_editor_condition(t_data *data)
 	buttons_move_mouse(l->control_buttons->buttons,
 					BL_CONTRL_MAX, &data->sdl->mouse, &l->control_buttons->curr_button);
 	chose_button(l->control_buttons);
-	chose_layers(data, l);
 	le_change_condition(data, data->level_editor->control_buttons->curr_button);
+	chose_layers(data, l);
 	update_texture(data);
 }

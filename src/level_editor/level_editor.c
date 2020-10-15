@@ -56,7 +56,6 @@ void		get_new_map_name(t_data *data)
 
 void		level_editor(t_data *data)
 {
-	init_engine(data);
 	init_level_editor(data);
 	get_new_map_name(data);
 	init_default_map(data);

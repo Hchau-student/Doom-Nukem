@@ -60,22 +60,41 @@ typedef struct		s_control_buttons
 
 typedef struct		s_draw_data
 {
-	int8_t			choosed_data;
+	int8_t			chosen_data;
+	t_texture		*dot;
 }					t_draw_data;
 
 typedef struct		s_level_editor
 {
 	t_texture			*background;
 	void				(*curr_action)(t_data *data);
-
-//	int8_t				curr_button;
 	t_control_buttons	control_buttons[BL_CONTRL_MAX];
 	t_palette			palette;
-//	void				(*control_condition)(struct s_level_editor *level_editor);
+	t_draw_data			draw_data;
 }					t_level_editor;
 
 void		level_editor_condition(t_data *data);
 void		le_draw_walls(t_data *data);
 void		init_level_editor(t_data *data);
+void		prepare_sector(t_data *data);
+
+/*
+**		add_new_wall.c
+*/
+
+void		add_new_wall(t_data *data, t_wall *wall);
+void		draw_changed_wall(t_wall *wall, t_data *data);
+
+/*
+**		wall_making_process.c
+*/
+
+int			new_point(t_data *data, t_vec3 *point, t_wall *wall);
+
+/*
+**		draw_wall_dots.c
+*/
+
+void		draw_wall_dots(t_data *data, t_wall *new_wall);
 
 #endif //DOOM_NUKEM_STRUCTURE_LEVEL_EDITOR_H

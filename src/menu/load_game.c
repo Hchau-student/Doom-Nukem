@@ -3,7 +3,6 @@
 
 void	load_game(t_data *data)
 {
-	init_engine(data);
 	parse(data->menu.cur_map_name, data);
 	start_the_game(data);
 }

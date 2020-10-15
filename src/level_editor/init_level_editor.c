@@ -57,6 +57,7 @@ void		init_level_editor(t_data *data)
 				"Malloc crashed, ./src/level_editor/level_editor.c",
 				data);
 	level_editor->control_buttons->pressed_button = -1;
+	level_editor->draw_data.dot = find_texture_by_name("wall_dot", data);
 	level_editor->background = find_texture_by_name("bedy_c_mamami", data);
 	data->level_editor = level_editor;
 	le_init_buttons(data->level_editor, data);

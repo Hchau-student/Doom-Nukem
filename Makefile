@@ -57,8 +57,12 @@ ENGINE_FILES = start_the_game.c \
 LEV_EDITOR_FILES = level_editor.c \
                    init_default_map.c \
                    condition.c \
-                   draw_walls.c \
-                   init_level_editor.c
+                   draw_walls1.c \
+                   init_level_editor.c \
+                   prepare_sector.c \
+                   add_new_wall.c \
+                   wall_making_process.c \
+                   draw_wall_dots.c
 
 DRAW_3D_FILES = draw_3d_main.c \
                 draw_3d_wall.c \
