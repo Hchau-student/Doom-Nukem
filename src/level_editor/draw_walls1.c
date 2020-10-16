@@ -52,18 +52,24 @@ int		le_change_wall(t_data *data, char is_old_wall, t_wall **wall)
 	if (is_old_wall == TRUE)
 		return (fill_new_wall(data, is_old_wall, *wall));
 	*wall = (t_wall *)safe_call_ptr(ft_memalloc(sizeof(t_wall)),
-		"Lol malloc crashed in \'./src/parse/parse_sector_line.c\'.", data);
+									"Lol malloc crashed in \'./src/parse/parse_sector_line.c\'.", data);
 	return (fill_new_wall(data, is_old_wall, *wall));
 }
 
-void		check_if_ended(t_data *data, int is_sector_ended)
+int		check_if_ended(t_data *data, int is_sector_ended)
 {
 	int			sec_count;
+	int			res;
 
 	sec_count = data->engine->sectors_count - 1;
 	if (is_sector_ended == TRUE)
+	{
 		data->engine->sectors[sec_count].is_ended = TRUE;
-	prepare_sector(data);
+		res = TRUE;
+	}
+	else
+		res = FALSE;
+	return (res);
 }
 
 int			check_clickable_area(t_data *data)
@@ -73,36 +79,44 @@ int			check_clickable_area(t_data *data)
 	return (TRUE);
 }
 
+int 		it_was_init_point(t_data *data, t_wall *wall)
+{
+	if (data->engine->sectors[data->engine->sectors_count - 1].render->walls_count == 0)
+	{
+		if (wall->left.x == wall->right.x && wall->right.y == wall->left.y)
+			return (TRUE);
+	}
+	return (FALSE);
+}
+
 void		le_draw_wall(t_data *data)
 {
-	static char			new_wall = FALSE;
+	static char			old_wall = FALSE;
 	static t_wall		*wall = NULL;
 	static int			is_sector_ended = FALSE;
 
+	draw_wall_dots(data, wall);
 	if (check_clickable_area(data) == FALSE)
-	{
-		draw_wall_dots(data, wall);
 		return ;
-	}
 	if (data->sdl->mouse.is_pressed == TRUE)
 	{
-		draw_changed_wall(wall, data);
-		if (data->engine->sectors_count % 50 == 0)
-			prepare_sector(data);
-		is_sector_ended = le_change_wall(data, new_wall, &wall);
-		new_wall = TRUE;
+		prepare_sector(data);
+		is_sector_ended = le_change_wall(data, old_wall, &wall);
+		old_wall = TRUE;
 	}
 	else
 	{
-		if (new_wall == TRUE)
+		if (old_wall == TRUE)
 		{
-			add_new_wall(data, wall);
-			check_if_ended(data, is_sector_ended);
-			wall = NULL;
+			if (it_was_init_point(data, wall) == FALSE)
+			{
+				add_new_wall(data, wall);
+				wall = NULL;
+				check_if_ended(data, is_sector_ended);
+				old_wall = FALSE;
+			}
 		}
-		new_wall = FALSE;
 	}
-	draw_wall_dots(data, wall);
 }
 
 void		le_draw_walls(t_data *data)

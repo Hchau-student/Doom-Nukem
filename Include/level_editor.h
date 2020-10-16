@@ -9,6 +9,11 @@
 
 void		init_default_map(t_data *data);
 
+#define MOUSE_X		(data->sdl->mouse.x * data->engine->minimap->size_divider + data->engine->minimap->start_from.x)
+#define MOUSE_Y		(data->sdl->mouse.y * data->engine->minimap->size_divider + data->engine->minimap->start_from.y)
+//#define DIFF_X		( - data->engine->minimap->start_from.x) / data->engine->minimap->size_divider
+//#define DIFF_Y		( - data->engine->minimap->start_from.y) / data->engine->minimap->size_divider
+
 typedef enum		e_button_edit
 {
 	BL_DRAW_OBJ,
@@ -61,7 +66,8 @@ typedef struct		s_control_buttons
 typedef struct		s_draw_data
 {
 	int8_t			chosen_data;
-	t_texture		*dot;
+	t_texture		*dot_draw;
+	t_texture		*dot_move;
 }					t_draw_data;
 
 typedef struct		s_level_editor
@@ -72,6 +78,12 @@ typedef struct		s_level_editor
 	t_palette			palette;
 	t_draw_data			draw_data;
 }					t_level_editor;
+
+typedef struct				s_wall_change
+{
+	t_wall					*wall;
+	struct s_wall_change	*next_change;
+}							t_wall_change;
 
 void		level_editor_condition(t_data *data);
 void		le_draw_walls(t_data *data);
@@ -90,11 +102,31 @@ void		draw_changed_wall(t_wall *wall, t_data *data);
 */
 
 int			new_point(t_data *data, t_vec3 *point, t_wall *wall);
+int			point_match(t_vec3 point1, t_vec3 point2);
 
 /*
 **		draw_wall_dots.c
 */
 
 void		draw_wall_dots(t_data *data, t_wall *new_wall);
+void		draw_sector_dots(t_data *data, t_texture *dot);
+
+/*
+**		move_obj.c
+*/
+
+void		le_move_obj(t_data *data);
+
+/*
+**			select_button.c
+*/
+
+void	le_change_condition(t_data *data, int8_t curr_button);
+
+/*
+**			create_new_file.c
+*/
+
+void		create_new_file(char *filename);
 
 #endif //DOOM_NUKEM_STRUCTURE_LEVEL_EDITOR_H

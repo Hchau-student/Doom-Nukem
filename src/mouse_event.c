@@ -21,6 +21,18 @@ void	mouse_event(SDL_Event *event, t_data *data)
 			data->sdl->mouse.is_pressed = TRUE;
 		}
 	}
+	if (event->type == SDL_MOUSEWHEEL)
+	{
+		if (event->wheel.y > 0)
+			data->sdl->mouse.is_scrolled_in = TRUE;
+		else if (event->wheel.y < 0)
+			data->sdl->mouse.is_scrolled_out = TRUE;
+	}
+	else
+	{
+		data->sdl->mouse.is_scrolled_in = FALSE;
+		data->sdl->mouse.is_scrolled_out = FALSE;
+	}
 	if (event->type == SDL_MOUSEBUTTONUP)
 	{
 		if (event->button.button == SDL_BUTTON_LEFT)

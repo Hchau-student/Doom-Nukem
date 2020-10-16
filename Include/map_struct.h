@@ -371,4 +371,10 @@ t_weapon		*find_weapon_by_name(char *name, t_data *data);
 
 uint32_t		is_inside(float x, float y, t_sector_render *sector);
 
+/*
+**		draw_minimap.c
+*/
+
+void	rescale_minimap(t_minimap *minimap, t_data *data);
+
 #endif

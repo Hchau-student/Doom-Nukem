@@ -150,6 +150,8 @@ typedef struct		s_mouse
 	int				y;
 	int8_t			is_pressed;
 	int8_t			is_moved;
+	int8_t			is_scrolled_in;
+	int8_t			is_scrolled_out;
 }					t_mouse;
 
 typedef struct		s_layers

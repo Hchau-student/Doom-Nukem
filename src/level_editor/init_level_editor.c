@@ -50,14 +50,15 @@ void		init_pallete(t_data *data)
 void		init_level_editor(t_data *data)
 {
 	t_level_editor		*level_editor;
-	char		*name[PD_COUNT] = PALETTE_DATA_NAMES;
 
 	data->engine->minimap->size_divider = 1;
+	rescale_minimap(data->engine->minimap, data);
 	level_editor = (t_level_editor *)safe_call_ptr(ft_memalloc(sizeof(t_level_editor)),
 				"Malloc crashed, ./src/level_editor/level_editor.c",
 				data);
 	level_editor->control_buttons->pressed_button = -1;
-	level_editor->draw_data.dot = find_texture_by_name("wall_dot", data);
+	level_editor->draw_data.dot_draw = find_texture_by_name("wall_dot_draw", data);
+	level_editor->draw_data.dot_move = find_texture_by_name("wall_dot_move", data);
 	level_editor->background = find_texture_by_name("bedy_c_mamami", data);
 	data->level_editor = level_editor;
 	le_init_buttons(data->level_editor, data);

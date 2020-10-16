@@ -62,7 +62,10 @@ LEV_EDITOR_FILES = level_editor.c \
                    prepare_sector.c \
                    add_new_wall.c \
                    wall_making_process.c \
-                   draw_wall_dots.c
+                   draw_wall_dots.c \
+                   le_move_obj1.c \
+                   select_button.c \
+                   create_new_file.c
 
 DRAW_3D_FILES = draw_3d_main.c \
                 draw_3d_wall.c \

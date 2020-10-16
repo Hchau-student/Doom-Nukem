@@ -33,7 +33,6 @@ static void		chose_layers(t_data *data, t_level_editor *l)
 			  data->sdl->layers->level_editor->bit_map,
 			  data->sdl->layers->level_editor->width,
 			  data);
-
 }
 
 static void		chose_button(t_control_buttons *buttons)
@@ -42,45 +41,6 @@ static void		chose_button(t_control_buttons *buttons)
 		buttons->buttons[buttons->curr_button].brightness = 0xFF;
 	if (buttons->pressed_button >= 0 && buttons->pressed_button < BL_CONTRL_MAX)
 		buttons->buttons[buttons->pressed_button].brightness = 0xFF;
-}
-
-void		create_new_file(char *filename)
-{
-	char					*full_name;
-
-	full_name = ft_strjoin("touch ", filename);
-	system(full_name);
-	ft_strdel(&full_name);
-	full_name = ft_strjoin("chmod 777 ", filename);
-	system(full_name);
-	ft_strdel(&full_name);
-}
-
-void	le_change_condition(t_data *data, int8_t curr_button)
-{
-	if (curr_button >= 0 && curr_button < BL_CONTRL_MAX)
-	{
-		if (curr_button == BL_EXIT && data->sdl->mouse.is_pressed == TRUE)
-		{
-			data->menu.cur_map_name = ft_strjoin(DEFAULT_PATH, DEFAULT_MAP);
-			data->level_editor->control_buttons->curr_button = -1;
-			data->sdl->mouse.is_pressed = FALSE;
-			menu(data);
-		}
-		else if (curr_button == BL_SAVE && data->sdl->mouse.is_pressed == TRUE)
-		{
-			create_new_file(data->menu.cur_map_name);
-		}
-		else if (data->sdl->mouse.is_pressed == TRUE)
-		{
-			data->level_editor->control_buttons->pressed_button = curr_button;
-			data->sdl->mouse.is_pressed = FALSE;
-			if (curr_button == BL_DRAW_OBJ)
-				data->level_editor->curr_action = &le_draw_walls;
-			else
-				data->level_editor->curr_action = NULL;
-		}
-	}
 }
 
 void		palette_chose_object(t_data *data)
@@ -92,6 +52,26 @@ void		palette_chose_object(t_data *data)
 	}
 }
 
+void		rescale_le_map(t_data *data)
+{
+	if (data->sdl->mouse.is_scrolled_in)
+	{
+		if (data->engine->minimap->size_divider < 1)
+		{
+			data->engine->minimap->size_divider += 0.01;
+//			data->engine->minimap->start_from.x += data->engine->minimap->start_from.x * 0.01;
+//			data->engine->minimap->start_from.y += data->engine->minimap->start_from.y * 0.01;
+		}
+	}
+	if (data->sdl->mouse.is_scrolled_out)
+	{
+		if (data->engine->minimap->size_divider > 0.2)
+		data->engine->minimap->size_divider -= 0.01;
+//		data->engine->minimap->start_from.x -= data->engine->minimap->start_from.x * 0.01;
+//		data->engine->minimap->start_from.y -= data->engine->minimap->start_from.y * 0.01;
+	}
+}
+
 void		level_editor_condition(t_data *data)
 {
 	t_level_editor		*l;
@@ -99,6 +79,7 @@ void		level_editor_condition(t_data *data)
 	l = data->level_editor;
 	prepare_all_buttons(l->control_buttons->buttons, BL_CONTRL_MAX);
 	l->control_buttons->curr_button = -1;
+	rescale_le_map(data);
 	buttons_move_mouse(l->control_buttons->buttons,
 					BL_CONTRL_MAX, &data->sdl->mouse, &l->control_buttons->curr_button);
 	chose_button(l->control_buttons);

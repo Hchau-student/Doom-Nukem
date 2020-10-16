@@ -55,7 +55,6 @@ void	draw_minimap(t_data *data)
 		return;
 	minimap = data->engine->minimap;
 	clear_minimap(minimap);
-	rescale_minimap(minimap, data);
 	draw_minimap_background(minimap);
 	draw_minimap_sectors(data);
 	draw_minimap_player(data);

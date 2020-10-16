@@ -51,4 +51,5 @@
 ./extra_src/level_editor/move_obj.bmp
 ./extra_src/level_editor/save.bmp
 ./extra_src/level_editor/le_exit.bmp
-./extra_src/level_editor/wall_dot.bmp
+./extra_src/level_editor/wall_dot_draw.bmp
+./extra_src/level_editor/wall_dot_move.bmp

@@ -34,7 +34,7 @@ int		new_point(t_data *data, t_vec3 *point, t_wall *wall1)
 
 	if (wall1 == NULL)
 		return FALSE;
-	*point = (t_vec3){data->sdl->mouse.x - SCREEN_WIDTH / 2, data->sdl->mouse.y - SCREEN_HEIGHT / 2, 0};
+	*point = (t_vec3){MOUSE_X, MOUSE_Y, 0};
 	sec_num_max = data->engine->sectors_count;
 	sec_num = 0;
 	while (sec_num < sec_num_max)

@@ -63,6 +63,7 @@ void		game_condition(t_data *data)
 	data->engine->minimap->start_from = (t_vec2){0, 0};
 	data->engine->minimap->size_divider = 5;
 	draw_3d(data);
+	rescale_minimap(data->engine->minimap, data);
 	draw_minimap(data);
 	chose_layers(data);
 	update_texture(data);
