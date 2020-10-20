@@ -53,3 +53,4 @@
 ./extra_src/level_editor/le_exit.bmp
 ./extra_src/level_editor/wall_dot_draw.bmp
 ./extra_src/level_editor/wall_dot_move.bmp
+./extra_src/level_editor/palette/palette_background.bmp

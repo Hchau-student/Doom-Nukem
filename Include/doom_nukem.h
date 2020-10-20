@@ -189,6 +189,7 @@ typedef struct		s_sdl
 typedef struct		s_main_actions
 {
 	void		(*condition)(struct s_data *draw);
+	char		condition_name;
 }					t_main_actions;
 
 /*

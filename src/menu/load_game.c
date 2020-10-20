@@ -3,6 +3,7 @@
 
 void	load_game(t_data *data)
 {
-	parse(data->menu.cur_map_name, data);
+	if (data->engine->sectors_count == 0)
+		parse(data->menu.cur_map_name, data);
 	start_the_game(data);
 }

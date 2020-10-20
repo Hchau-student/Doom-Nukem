@@ -14,4 +14,5 @@ void			start_the_game(t_data *data)
 	data->engine->minimap->size_divider = 3.2;
 	data->engine->minimap->background = find_texture_by_name("minimap", data);
 	data->go_to->condition = &game_condition;
+	data->go_to->condition_name = GAME;
 }

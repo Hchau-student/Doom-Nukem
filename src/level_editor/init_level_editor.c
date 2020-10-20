@@ -26,25 +26,26 @@ void		le_init_buttons(t_level_editor *l, t_data *data)
 	}
 }
 
-void		init_pallete(t_data *data)
+void		init_palette(t_data *data)
 {
 	char		*name[PD_COUNT] = PALETTE_DATA_NAMES;
 	int			i;
 
 	i = 0;
-	while (i < PD_COUNT)
-	{
-		data->level_editor->palette.choose_data[i].height = 50;
-		data->level_editor->palette.choose_data[i].width = 50;
-		data->level_editor->palette.choose_data[i].x = SCREEN_WIDTH - 70;
-		data->level_editor->palette.choose_data[i].y = 70 * i + 20;
-		data->level_editor->palette.choose_data[i].borders.start = (t_vec2){SCREEN_WIDTH - 70, 70 * i + 20};
-		data->level_editor->palette.choose_data[i].borders.end = (t_vec2){SCREEN_WIDTH - 70, 70 * i + 20};
-		data->level_editor->palette.choose_data[i].borders.end.x += 50;
-		data->level_editor->palette.choose_data[i].borders.end.y += 50;
-		data->level_editor->palette.choose_data[i].texture = find_texture_by_name(name[i], data);
-		i++;
-	}
+	data->level_editor->palette.background = find_texture_by_name("palette_background", data);
+//	while (i < PD_COUNT)
+//	{
+//		data->level_editor->palette.choose_data[i].height = 50;
+//		data->level_editor->palette.choose_data[i].width = 50;
+//		data->level_editor->palette.choose_data[i].x = SCREEN_WIDTH - 70;
+//		data->level_editor->palette.choose_data[i].y = 70 * i + 20;
+//		data->level_editor->palette.choose_data[i].borders.start = (t_vec2){SCREEN_WIDTH - 70, 70 * i + 20};
+//		data->level_editor->palette.choose_data[i].borders.end = (t_vec2){SCREEN_WIDTH - 70, 70 * i + 20};
+//		data->level_editor->palette.choose_data[i].borders.end.x += 50;
+//		data->level_editor->palette.choose_data[i].borders.end.y += 50;
+//		data->level_editor->palette.choose_data[i].texture = find_texture_by_name(name[i], data);
+//		i++;
+//	}
 }
 
 void		init_level_editor(t_data *data)
@@ -62,7 +63,7 @@ void		init_level_editor(t_data *data)
 	level_editor->background = find_texture_by_name("bedy_c_mamami", data);
 	data->level_editor = level_editor;
 	le_init_buttons(data->level_editor, data);
-//	init_pallete(data);
+	init_palette(data);
 	//1) init_palette_buttons_and_pallete_background
 	//2) resize_img_to_background
 //	resize_img

@@ -40,6 +40,7 @@ void	menu(t_data *data)
 {
 	clear_keysum(data);
 	data->go_to->condition = &menu_condition;
+	data->go_to->condition_name = MAIN_MENU;
 //	draw_background;
 //	load_game(data);
 //	data->condition = &draw_menu;

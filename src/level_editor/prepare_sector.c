@@ -19,6 +19,10 @@ void		prepare_new_sector(t_sector *sectors, int sectors_count, t_data *data)
 											 "Lol malloc crashed in \'./src/parse/parse_sector_line.c\'.", data);
 	sectors[sectors_count].render->walls_count = 0;
 	sectors[sectors_count].is_ended = FALSE;
+	sectors[sectors_count].render->ceiling_height = DEFAULT_CEIL;
+	sectors[sectors_count].render->floor_height = DEFAULT_FLOOR;
+	sectors[sectors_count].ceiling_height = DEFAULT_CEIL;
+	sectors[sectors_count].floor_height = DEFAULT_FLOOR;
 	data->engine->sectors_count++;
 }
 

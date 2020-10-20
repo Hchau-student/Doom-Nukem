@@ -229,6 +229,7 @@ typedef struct			s_display_hud
 	int8_t				health;
 	int8_t				armor;
 	int8_t				state;
+	t_button			menu;
 }						t_display_hud;
 
 /*
@@ -375,6 +376,6 @@ uint32_t		is_inside(float x, float y, t_sector_render *sector);
 **		draw_minimap.c
 */
 
-void	rescale_minimap(t_minimap *minimap, t_data *data);
+void			rescale_minimap(t_minimap *minimap, t_data *data);
 
 #endif

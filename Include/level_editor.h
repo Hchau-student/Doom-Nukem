@@ -11,8 +11,9 @@ void		init_default_map(t_data *data);
 
 #define MOUSE_X		(data->sdl->mouse.x * data->engine->minimap->size_divider + data->engine->minimap->start_from.x)
 #define MOUSE_Y		(data->sdl->mouse.y * data->engine->minimap->size_divider + data->engine->minimap->start_from.y)
-//#define DIFF_X		( - data->engine->minimap->start_from.x) / data->engine->minimap->size_divider
-//#define DIFF_Y		( - data->engine->minimap->start_from.y) / data->engine->minimap->size_divider
+#define DEFAULT_TEXT	"bedy_c_mamami"
+#define DEFAULT_FLOOR	0
+#define DEFAULT_CEIL	40
 
 typedef enum		e_button_edit
 {
@@ -102,7 +103,7 @@ void		draw_changed_wall(t_wall *wall, t_data *data);
 */
 
 int			new_point(t_data *data, t_vec3 *point, t_wall *wall);
-int			point_match(t_vec3 point1, t_vec3 point2);
+int			point_match(t_vec3 point1, t_vec3 point2, float check_area);
 
 /*
 **		draw_wall_dots.c

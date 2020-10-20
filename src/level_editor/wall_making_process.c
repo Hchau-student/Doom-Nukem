@@ -5,9 +5,9 @@
 #include "../../Include/doom_nukem.h"
 #include "../../Include/level_editor.h"
 
-int			point_match(t_vec3 point1, t_vec3 point2)
+int			point_match(t_vec3 point1, t_vec3 point2, float check_area)
 {
-	if (fabs(point1.x - point2.x) < 10 && fabs(point1.y - point2.y) < 10)
+	if (fabs(point1.x - point2.x) < check_area && fabs(point1.y - point2.y) < check_area)
 		return (TRUE);
 	return (FALSE);
 }
@@ -31,9 +31,11 @@ int		new_point(t_data *data, t_vec3 *point, t_wall *wall1)
 	int		sec_num_max;
 	t_wall	*wall_iter;
 	int		curr_wall;
+	float	check_area;
 
 	if (wall1 == NULL)
 		return FALSE;
+	check_area = 10 * data->engine->minimap->size_divider;
 	*point = (t_vec3){MOUSE_X, MOUSE_Y, 0};
 	sec_num_max = data->engine->sectors_count;
 	sec_num = 0;
@@ -43,10 +45,10 @@ int		new_point(t_data *data, t_vec3 *point, t_wall *wall1)
 		wall_iter = data->engine->sectors[sec_num].render->walls;
 		while (curr_wall > 0)
 		{
-			if (point_match(wall_iter->right, *point) == TRUE)
+			if (point_match(wall_iter->right, *point, check_area) == TRUE)
 //				return (change_point(point, wall_iter->right));
 				return (change_point1(point, wall_iter->right, curr_wall));
-			if (point_match(wall_iter->left, *point) == TRUE)
+			if (point_match(wall_iter->left, *point, check_area) == TRUE)
 //				return (change_point(point, wall_iter->left));
 				return (change_point1(point, wall_iter->left, curr_wall));
 			wall_iter = wall_iter->next;

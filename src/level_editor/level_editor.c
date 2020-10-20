@@ -60,4 +60,5 @@ void		level_editor(t_data *data)
 	get_new_map_name(data);
 	init_default_map(data);
 	data->go_to->condition = &level_editor_condition;
+	data->go_to->condition_name = LEVEL_EDITOR;
 }

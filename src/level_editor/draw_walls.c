@@ -1,179 +1,132 @@
 //
-// Created by Hugor Chau on 10/14/20.
+// Created by Hugor Chau on 10/15/20.
 //
+
 #include "../../Include/doom_nukem.h"
 #include "../../Include/level_editor.h"
 
-void		prepare_sector(t_data *data)
-{
-	t_sector	*sectors;
+/*
+ * TODO
+ * */
 
-	if (data->engine->sectors_count % 50 == 0)
-	{
-		sectors = (t_sector *)safe_call_ptr(ft_memalloc(sizeof(t_sector)
-														* (data->engine->sectors_count + 50)), "Malloc crashed in"
-																							   "\"./src/parse/parse_sector\", alloc_sectors.", data);
-		safe_call_ptr(ft_memcpy(sectors, data->engine->sectors, sizeof(t_sector)
-																* (data->engine->sectors_count)),
-					  "ft_memcpy crashed in"
-					  "\"./src/parse/parse_sector\", alloc_sectors.", data);
-		data->engine->sectors = sectors;
-	}
-	if (data->engine->sectors_count == 0 || data->engine->sectors[data->engine->sectors_count - 1].is_ended == TRUE)
-	{
-		data->engine->sectors[data->engine->sectors_count].render =
-				(t_sector_render *)safe_call_ptr(ft_memalloc(sizeof(t_sector_render)),
-				"Lol malloc crashed in \'./src/parse/parse_sector_line.c\'.", data);
-		sectors[data->engine->sectors_count].render->walls_count = 0;
-		data->engine->sectors_count++;
-		data->engine->sectors[data->engine->sectors_count - 1].is_ended = FALSE;
-	}
-	printf("%d\n", data->engine->sectors_count);
-}
 
-void		new_point(t_data *data, t_vec3 *point, t_wall *wall1)
-{
-	int		sec_num;
-	int		sec_num_max;
-	t_wall	*wall;
-	t_vec3	new_point;
-	int		curr_wall;
-
-	if (wall1 == NULL)
-		return ;
-	new_point = (t_vec3){data->sdl->mouse.x - SCREEN_WIDTH / 2, data->sdl->mouse.y - SCREEN_HEIGHT / 2, 0};
-	sec_num_max = data->engine->sectors_count;
-	sec_num = 0;
-	//1) пройтись по всем стенам в секторе, узнать, не пересекает ли чего;
-	//2) сделать точки магнитами
-	*point = (t_vec3){data->sdl->mouse.x - SCREEN_WIDTH / 2, data->sdl->mouse.y - SCREEN_HEIGHT / 2, 0};
-	while (sec_num < sec_num_max)
-	{
-		curr_wall = data->engine->sectors[sec_num].render->walls_count;
-		wall = data->engine->sectors[sec_num].render->walls;
-		while (curr_wall > 0)
-		{
-			if (wall != wall1)
-			{
-				if (fabs(wall->right.x - new_point.x) < 10 && fabs(wall->right.y - new_point.y) < 10) {
-					*point = wall->right;
-					printf("wwwww%d\n", curr_wall);
-					data->engine->sectors[sec_num].is_ended = TRUE;
-					return;
-				}
-				if (fabs(wall->left.x - new_point.x) < 10 && fabs(wall->left.y - new_point.y) < 10) {
-					*point = wall->left;
-					printf("wwwww%d\n", curr_wall);
-					data->engine->sectors[sec_num].is_ended = TRUE;
-					return;
-				}
-			}
-			wall = wall->next;
-			curr_wall--;
-		}
-		sec_num++;
-	}
-}
-
-void		fill_new_wall(t_data *data, char start, t_wall *wall)
+int		fill_new_wall(t_data *data, char is_old_wall, t_wall *wall)
 {
 	t_wall			*w;
 	t_wall			*w1;
 
 	if (wall == NULL)
-		return ;
+		return FALSE;
 	w = wall;
 	w->sector = &data->engine->sectors[data->engine->sectors_count - 1];
 	w->ceiling_height = data->engine->sectors->ceiling_height;
 	w->floor_height = data->engine->sectors->floor_height;
+	w->textures[DOWN_TEXT] = find_texture_by_name(DEFAULT_TEXT, data);
+	w->textures[UP_TEXT] = find_texture_by_name(DEFAULT_TEXT, data);
+	w->textures[MIDDLE_TEXT] = find_texture_by_name(DEFAULT_TEXT, data);
+	w->height = w->sector->ceiling_height - w->sector->floor_height;
+	w->length = sqrt(pow(w->left.x - w->right.x, 2)
+						+ pow(w->left.y - w->right.y, 2));
 	if (data->engine->sectors[data->engine->sectors_count - 1].render->walls_count == 0)
 	{
-		if (start == FALSE)
-			new_point(data, &w->left, w);
+		if (is_old_wall == FALSE)
+		{
+			(new_point(data, &w->right, w));
+			(new_point(data, &w->left, w));
+		}
 		else
-			new_point(data, &w->right, w);
+			return (new_point(data, &w->right, w));
 	}
 	else
 	{
 		w1 = data->engine->sectors[data->engine->sectors_count - 1].render->walls->prev;
-		if (start == FALSE)
+		if (is_old_wall == FALSE)
+		{
 			w->left = w1->right;
+			w->right = w1->right;
+		}
 		else
-			new_point(data, &w->right, w);
+			return (new_point(data, &w->right, w));
 	}
+	return (FALSE);
 }
 
-void		le_change_wall(t_data *data, char start, t_wall **wall)
+int		le_change_wall(t_data *data, char is_old_wall, t_wall **wall)
 {
 	if (wall == NULL)
-		return ;
-	if (start == TRUE)
-		return (fill_new_wall(data, start, *wall));
+		return FALSE;
+	if (is_old_wall == TRUE)
+		return (fill_new_wall(data, is_old_wall, *wall));
 	*wall = (t_wall *)safe_call_ptr(ft_memalloc(sizeof(t_wall)),
-		"Lol malloc crashed in \'./src/parse/parse_sector_line.c\'.", data);
-	fill_new_wall(data, start, *wall);
+									"Lol malloc crashed in \'./src/parse/parse_sector_line.c\'.", data);
+	return (fill_new_wall(data, is_old_wall, *wall));
 }
 
-void		add_new_wall(t_data *data, t_wall *wall)
+int		check_if_ended(t_data *data, int is_sector_ended)
 {
-	t_wall			*w;
-	t_sector		*sectors;
-	int				sec_count;
+	int			sec_count;
+	int			res;
 
-	if (wall == NULL)
-		return ;
 	sec_count = data->engine->sectors_count - 1;
-	sectors = data->engine->sectors;
-	if (sectors[sec_count].render->walls_count == 0)
+	if (is_sector_ended == TRUE)
 	{
-//		printf("1\n");
-		wall->next = wall;
-		wall->prev = wall;
-		data->engine->sectors[sec_count].render->walls = wall;
+		data->engine->sectors[sec_count].is_ended = TRUE;
+		res = TRUE;
 	}
 	else
+		res = FALSE;
+	return (res);
+}
+
+int			check_clickable_area(t_data *data)
+{
+	if (data->level_editor->control_buttons->curr_button == BL_SAVE ||
+			data->level_editor->control_buttons->curr_button == BL_MOVE_OBJ ||
+			data->level_editor->control_buttons->curr_button == BL_EXIT ||
+			data->level_editor->control_buttons->curr_button == BL_DRAW_OBJ ||
+			data->level_editor->control_buttons->curr_button == BL_DEL_OBJ)
+		return (FALSE);
+	return (TRUE);
+}
+
+int 		it_was_init_point(t_data *data, t_wall *wall)
+{
+	if (data->engine->sectors[data->engine->sectors_count - 1].render->walls_count == 0)
 	{
-		w = sectors[sec_count].render->walls;
-		if (w->prev == wall)
-			return ;
-//		printf("2\n");
-		w->prev->next = wall;
-		wall->prev = w->prev;
-		w->prev = w->prev->next;
-		w->prev->next = w;
+		if (wall->left.x == wall->right.x && wall->right.y == wall->left.y)
+			return (TRUE);
 	}
-	sectors[sec_count].render->walls_count++;
+	return (FALSE);
 }
 
 void		le_draw_wall(t_data *data)
 {
-	static char			start = FALSE;
+	static char			old_wall = FALSE;
 	static t_wall		*wall = NULL;
+	static int			is_sector_ended = FALSE;
 
-	if (start == TRUE)
-	{
-		add_new_wall(data, wall);
-//		if (data->engine->sectors[data->engine->sectors_count - 1].render.)
-	}
+	draw_wall_dots(data, wall);
 	if (data->sdl->mouse.is_pressed == TRUE)
 	{
-		if (data->level_editor->palette.curr_obj == PD_WALL)
-		{
-			if (data->engine->sectors_count % 50 == 0)
-			prepare_sector(data);
-			le_change_wall(data, start, &wall);
-		}
-		start = TRUE;
+		if (old_wall == FALSE)
+		if (check_clickable_area(data) == FALSE)
+			return ;
+		prepare_sector(data);
+		is_sector_ended = le_change_wall(data, old_wall, &wall);
+		old_wall = TRUE;
 	}
 	else
 	{
-		if (start == TRUE)
+		if (old_wall == TRUE)
 		{
-			wall = NULL;
-			if (data->engine->sectors[data->engine->sectors_count - 1].is_ended == TRUE)
-				prepare_sector(data);
+			if (it_was_init_point(data, wall) == FALSE)
+			{
+				add_new_wall(data, wall);
+				wall = NULL;
+				check_if_ended(data, is_sector_ended);
+				old_wall = FALSE;
+			}
 		}
-		start = FALSE;
 	}
 }
 

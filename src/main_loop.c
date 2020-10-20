@@ -24,12 +24,18 @@ void	main_loop(t_data *data)
 			}
 			if (event.type == SDL_KEYDOWN) {
 				if (event.key.keysym.sym == SDLK_ESCAPE)
-					quit = 1;
+				{
+					if (data->go_to->condition_name == MAIN_MENU)
+						remove_data(data);
+					menu(data);
+				}
+//				if (event.key.keysym.sym == SDLK_ESCAPE)
+//					quit = 1;
 				key_event(&event, data);
 			}
 			if (event.type == SDL_KEYUP) {
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-					quit = 1;
+//				if (event.key.keysym.sym == SDLK_ESCAPE)
+//					quit = 1;
 				key_event(&event, data);
 			}
 		}

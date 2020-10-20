@@ -57,13 +57,13 @@ ENGINE_FILES = start_the_game.c \
 LEV_EDITOR_FILES = level_editor.c \
                    init_default_map.c \
                    condition.c \
-                   draw_walls1.c \
+                   draw_walls.c \
                    init_level_editor.c \
                    prepare_sector.c \
                    add_new_wall.c \
                    wall_making_process.c \
                    draw_wall_dots.c \
-                   le_move_obj1.c \
+                   le_move_obj.c \
                    select_button.c \
                    create_new_file.c
 
